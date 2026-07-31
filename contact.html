@@ -78,6 +78,14 @@
 
     function handleFormSubmit(event) {
       event.preventDefault();
+      const feeling = document.getElementById('contact-feeling').value;
+      const message = document.getElementById('contact-message').value;
+      const timestamp = new Date().toLocaleString();
+
+      let prayers = JSON.parse(localStorage.getItem('jy_prayers') || '[]');
+      prayers.push({ feeling, message, timestamp });
+      localStorage.setItem('jy_prayers', JSON.stringify(prayers));
+
       alert('Thank you for sharing your prayer request. Your intentions will be remembered in our weekly prayer meeting.');
       event.target.reset();
     }

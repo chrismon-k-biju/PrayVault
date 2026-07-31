@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Portal | Jesus Youth AJCE</title>
+  <link rel="icon" type="image/png" href="assets/logo.png">
+  
+  <!-- Google Fonts: Playfair Display & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
+
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Main Sanctuary Design System Stylesheet -->
+  <link rel="stylesheet" href="css/sanctuary.css">
+
+  <style>
+    /* Admin Dashboard Custom Styles */
+    .admin-container {
+      max-width: 1200px;
+      margin: 120px auto 60px auto;
+      padding: 0 20px;
+    }
+
+    /* Glassmorphic Login Box */
+    .login-wrapper {
+      max-width: 440px;
+      margin: 140px auto;
+      background: white;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 45px 35px;
+      box-shadow: var(--card-shadow-hover);
+      text-align: center;
+    }
+
+    /* Tabs Layout */
+    .admin-dashboard {
+      display: none; /* Shown dynamically when authenticated */
+      background: white;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--card-shadow);
+      overflow: hidden;
+    }
+
+    .admin-header {
+      background: var(--soft-cream);
+      padding: 30px 40px;
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .admin-nav {
+      display: flex;
+      background: var(--bg-light);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .admin-nav-btn {
+      flex: 1;
+      padding: 16px 20px;
+      border: none;
+      background: transparent;
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: var(--charcoal-light);
+      cursor: pointer;
+      transition: var(--transition-smooth);
+      border-bottom: 3px solid transparent;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .admin-nav-btn:hover {
+      background: rgba(35, 83, 71, 0.03);
+      color: var(--muted-gold);
+    }
+
+    .admin-nav-btn.active {
+      color: var(--muted-gold);
+      border-bottom-color: var(--muted-gold);
+      background: white;
+    }
+
+    .admin-content {
+      padding: 40px;
+    }
+
+    .admin-tab-pane {
+      display: none;
+    }
+
+    .admin-tab-pane.active {
+      display: block;
+    }
+
+    /* Action buttons and headers */
+    .pane-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    /* Prayers intention styles */
+    .prayer-intentions-list {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+
+    .prayer-item {
+      background: var(--bg-light);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 24px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 20px;
+      transition: var(--transition-smooth);
+    }
+
+    .prayer-item:hover {
+      box-shadow: 0 4px 15px rgba(5, 31, 32, 0.03);
+      border-color: var(--muted-gold);
+    }
+
+    .prayer-feeling-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      border-radius: 20px;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+      letter-spacing: 0.05em;
+    }
+
+    .badge-anxious { background: #fee2e2; color: #991b1b; }
+    .badge-fear { background: #ffedd5; color: #9a3412; }
+    .badge-grateful { background: #dcfce7; color: #166534; }
+    .badge-sad { background: #e0f2fe; color: #075985; }
+    .badge-other { background: #f3f4f6; color: #374151; }
+
+    .prayer-meta {
+      font-size: 0.8rem;
+      color: #888;
+      margin-top: 8px;
+    }
+
+    /* Forms */
+    .admin-form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .admin-form-grid {
+        grid-template-columns: 1fr;
+      }
+      .admin-content {
+        padding: 20px;
+      }
+      .admin-header {
+        padding: 20px;
+      }
+      .prayer-item {
+        flex-direction: column;
+      }
+      .prayer-actions {
+        width: 100%;
+        text-align: right;
+      }
+    }
+
+    /* Modal dialog */
+    .admin-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(5, 31, 32, 0.4);
+      backdrop-filter: blur(5px);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .admin-modal.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background: white;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      max-width: 700px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 50px rgba(5, 31, 32, 0.15);
+    }
+
+    .modal-header {
+      background: var(--soft-cream);
+      padding: 20px 30px;
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-body {
+      padding: 30px;
+    }
+
+    /* Table styling */
+    .activity-table-wrapper {
+      overflow-x: auto;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-subtle);
+    }
+
+    .activity-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.95rem;
+    }
+
+    .activity-table th {
+      background: var(--soft-cream);
+      padding: 16px 20px;
+      font-weight: 600;
+      color: var(--charcoal);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .activity-table td {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border-subtle);
+      color: var(--charcoal-light);
+    }
+
+    .activity-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .action-badge {
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      background: var(--gold-soft);
+      color: var(--muted-gold);
+    }
+
+    .btn-circle {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--border-subtle);
+      background: white;
+      cursor: pointer;
+      color: var(--charcoal-light);
+      transition: var(--transition-smooth);
+    }
+
+    .btn-circle:hover {
+      background: var(--muted-gold);
+      color: white;
+      border-color: var(--muted-gold);
+    }
+
+    .btn-circle-danger:hover {
+      background: #c95c5c;
+      color: white;
+      border-color: #c95c5c;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Floating Back Button -->
+  <div class="back-home-container">
+    <a href="index.html" class="back-home-link">
+      <i class="fas fa-arrow-left"></i> Back to Sanctuary
+    </a>
+  </div>
+
+  <div class="admin-container">
+
+    <!-- LOGIN SCREEN -->
+    <div id="login-section" class="login-wrapper reveal-on-scroll">
+      <img src="assets/logo.png" alt="Jesus Youth AJCE Logo" style="height: 60px; margin-bottom: 20px;">
+      <h2 style="margin-bottom: 10px;">Admin Portal</h2>
+      <p style="font-size: 0.9rem; color: #666; margin-bottom: 30px;">Access digital sanctuary administration settings.</p>
+
+      <form id="login-form" onsubmit="handleLoginSubmit(event)">
+        <div class="form-group" style="text-align: left;">
+          <label class="form-label" for="username">Username</label>
+          <input type="text" id="username" class="form-input" required placeholder="Enter username">
+        </div>
+
+        <div class="form-group" style="text-align: left;">
+          <label class="form-label" for="password">Password</label>
+          <input type="password" id="password" class="form-input" required placeholder="Enter password">
+        </div>
+
+        <div id="login-error" style="color: #c95c5c; font-weight: 500; font-size: 0.9rem; margin-bottom: 20px; display: none;">
+          <i class="fas fa-exclamation-circle"></i> Invalid username or password.
+        </div>
+
+        <button type="submit" class="btn-sanctuary btn-primary" style="width: 100%; justify-content: center; padding: 12px;">
+          <i class="fas fa-sign-in-alt"></i> Login
+        </button>
+      </form>
+    </div>
+
+    <!-- MAIN DASHBOARD -->
+    <div id="dashboard-section" class="admin-dashboard">
+      <div class="admin-header">
+        <div>
+          <h2 style="font-size: 1.8rem; line-height: 1.2;">PrayVault Dashboard</h2>
+          <p style="font-size: 0.9rem; color: var(--charcoal-light); margin: 5px 0 0 0;">Welcome, <span id="admin-user-display" style="font-weight: 600; color: var(--muted-gold);">Admin</span></p>
+        </div>
+        <button onclick="handleLogout()" class="btn-sanctuary btn-secondary" style="padding: 8px 18px; font-size: 0.9rem;">
+          <i class="fas fa-sign-out-alt"></i> Logout
+        </button>
+      </div>
+
+      <div class="admin-nav">
+        <button class="admin-nav-btn active" id="tab-updates-btn" onclick="switchTab('updates')">
+          <i class="fas fa-bullhorn"></i> Announcements & Events
+        </button>
+        <button class="admin-nav-btn" id="tab-prayers-btn" onclick="switchTab('prayers')">
+          <i class="fas fa-hands-praying"></i> Prayer Requests
+        </button>
+        <button class="admin-nav-btn" id="tab-torchbearers-btn" onclick="switchTab('torchbearers')" style="display: none;">
+          <i class="fas fa-user-group"></i> Meet Torchbearers
+        </button>
+      </div>
+
+      <div class="admin-content">
+
+        <!-- TAB 1: ANNOUNCEMENTS & EVENTS -->
+        <div id="tab-updates" class="admin-tab-pane active">
+          <div class="pane-header">
+            <div>
+              <h3>Announcements & Activities</h3>
+              <p style="font-size: 0.9rem; color: #666; margin: 0;">Manage feed updates on the JY DigiSquare page.</p>
+            </div>
+            <button onclick="openAddModal()" class="btn-sanctuary btn-primary" style="padding: 10px 20px;">
+              <i class="fas fa-plus"></i> Add New Update
+            </button>
+          </div>
+
+          <div class="activity-table-wrapper">
+            <table class="activity-table">
+              <thead>
+                <tr>
+                  <th>Title</th>
+                  <th>Category</th>
+                  <th>Date & Time</th>
+                  <th>Venue</th>
+                  <th style="text-align: center;">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="updates-table-body">
+                <!-- Rendered dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- TAB 2: USER PRAYER REQUESTS -->
+        <div id="tab-prayers" class="admin-tab-pane">
+          <div class="pane-header">
+            <div>
+              <h3>User Prayer Requests</h3>
+              <p style="font-size: 0.9rem; color: #666; margin: 0;">Intentions submitted by students and staff members.</p>
+            </div>
+            <button onclick="clearAllPrayers()" class="btn-sanctuary btn-secondary" style="padding: 8px 18px; font-size: 0.9rem;">
+              <i class="fas fa-trash-alt"></i> Clear All
+            </button>
+          </div>
+
+          <div class="prayer-intentions-list" id="prayers-list-container">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+
+        <!-- TAB 3: MEET TORCHBEARERS -->
+        <div id="tab-torchbearers" class="admin-tab-pane">
+          <div class="pane-header">
+            <div>
+              <h3>Core Leadership Details</h3>
+              <p style="font-size: 0.9rem; color: #666; margin: 0;">Update core members listed in the "Meet Torchbearers" page.</p>
+            </div>
+          </div>
+
+          <div class="activity-table-wrapper">
+            <table class="activity-table">
+              <thead>
+                <tr>
+                  <th>Initials</th>
+                  <th>Name</th>
+                  <th>Role</th>
+                  <th>Department & Year</th>
+                  <th>Quote</th>
+                  <th style="text-align: center;">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="leaders-table-body">
+                <!-- Rendered dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ADD / EDIT UPDATE MODAL -->
+  <div class="admin-modal" id="update-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="modal-title">Add Announcement/Event</h3>
+        <button onclick="closeModal()" class="btn-circle"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="modal-body">
+        <form id="update-form" onsubmit="handleSaveUpdate(event)">
+          <input type="hidden" id="edit-id">
+          
+          <div class="form-group">
+            <label class="form-label" for="form-title">Title / Name</label>
+            <input type="text" id="form-title" class="form-input" required placeholder="e.g. Weekly Fellowship Gathering">
+          </div>
+
+          <div class="admin-form-grid">
+            <div class="form-group">
+              <label class="form-label" for="form-category">Category Type</label>
+              <select id="form-category" class="form-input" style="padding: 12px 16px; width: 100%; border: 1px solid var(--border-subtle); background: white; outline: none; border-radius: var(--radius-sm);" required>
+                <option value="event">Event (Worship/Intercession)</option>
+                <option value="announcement">Announcement (Updates/Auditions)</option>
+                <option value="news">News (Outreach/Feasts)</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="form-label-tag">Badge Label</label>
+              <input type="text" id="form-label-tag" class="form-input" required placeholder="e.g. Weekly Gathering, Vigil, Outreach">
+            </div>
+          </div>
+
+          <div class="admin-form-grid">
+            <div class="form-group">
+              <label class="form-label" for="form-icon">FontAwesome Icon Class</label>
+              <select id="form-icon" class="form-input" style="padding: 12px 16px; width: 100%; border: 1px solid var(--border-subtle); background: white; outline: none; border-radius: var(--radius-sm);" required>
+                <option value="fa-hands-praying">Prayer Hands (fa-hands-praying)</option>
+                <option value="fa-cross">Cross (fa-cross)</option>
+                <option value="fa-bullhorn">Bullhorn/Announcement (fa-bullhorn)</option>
+                <option value="fa-music">Music Notes (fa-music)</option>
+                <option value="fa-book-bible">Bible (fa-book-bible)</option>
+                <option value="fa-dove">Dove (fa-dove)</option>
+                <option value="fa-cake-candles">Celebration/Feast (fa-cake-candles)</option>
+                <option value="fa-handshake-angle">Outreach/Helping (fa-handshake-angle)</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="form-date">Date Info</label>
+              <input type="text" id="form-date" class="form-input" required placeholder="e.g. Every Wednesday, Aug 12, 2026">
+            </div>
+          </div>
+
+          <div class="admin-form-grid">
+            <div class="form-group">
+              <label class="form-label" for="form-time">Time</label>
+              <input type="text" id="form-time" class="form-input" required placeholder="e.g. 4:45 PM">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="form-venue">Venue / Location</label>
+              <input type="text" id="form-venue" class="form-input" required placeholder="e.g. College Chapel, JY Square">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="form-desc">Detailed Description</label>
+            <textarea id="form-desc" class="form-textarea" rows="4" required placeholder="Describe the announcement, activities details, or event information..."></textarea>
+          </div>
+
+          <div class="admin-form-grid">
+            <div class="form-group">
+              <label class="form-label" for="form-btn-text">Action Button Text</label>
+              <input type="text" id="form-btn-text" class="form-input" placeholder="e.g. Join Us, View Gallery (Default: Join Us)">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="form-btn-link">Action Button Link</label>
+              <input type="text" id="form-btn-link" class="form-input" placeholder="e.g. contact.html, gallery.html (Default: contact.html)">
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 15px; margin-top: 10px;">
+            <button type="submit" class="btn-sanctuary btn-primary" style="flex: 1; justify-content: center; border: none; cursor: pointer; padding: 12px 20px;">
+              <i class="fas fa-save"></i> Save Updates
+            </button>
+            <button type="button" onclick="closeModal()" class="btn-sanctuary btn-secondary" style="flex: 1; justify-content: center; padding: 12px 20px;">
+              Cancel
+            </button>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="sanctuary-footer">
+    <div class="footer-content">
+      <p class="footer-quote">
+        "I am the light of the world. Whoever follows me will never walk in darkness, but will have the light of life."
+        <br><span style="font-size: 0.95rem; color: var(--muted-gold); font-style: normal;">— John 8:12</span>
+      </p>
+
+      <ul class="footer-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="verse.html">Daily Verse</a></li>
+        <li><a href="audio.html">Audio Devotionals</a></li>
+        <li><a href="saint.html">Saint of the Day</a></li>
+        <li><a href="gallery.html">Gallery</a></li>
+        <li><a href="digisquare.html">JY DigiSquare</a></li>
+        <li><a href="torchbearers.html">Meet Torchbearers</a></li>
+        <li><a href="admin.html">Admin</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+
+      <div class="footer-copy">
+        &copy; <span id="year">2026</span> Jesus Youth Amal Jyothi College of Engineering. All rights reserved.
+      </div>
+    </div>
+  </footer>
+
+  <!-- EDIT LEADER MODAL -->
+  <div class="admin-modal" id="leader-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Edit Leader Details</h3>
+        <button onclick="closeLeaderModal()" class="btn-circle"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="modal-body">
+        <form id="leader-form" onsubmit="handleSaveLeader(event)">
+          <input type="hidden" id="edit-leader-id">
+          
+          <div class="admin-form-grid">
+            <div class="form-group">
+              <label class="form-label" for="leader-form-name">Name</label>
+              <input type="text" id="leader-form-name" class="form-input" required placeholder="e.g. Albin George">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="leader-form-initials">Initials Badge</label>
+              <input type="text" id="leader-form-initials" class="form-input" required placeholder="e.g. AG">
+            </div>
+          </div>
+
+          <div class="admin-form-grid">
+            <div class="form-group">
+              <label class="form-label" for="leader-form-role">Role / Designation</label>
+              <input type="text" id="leader-form-role" class="form-input" required placeholder="e.g. Unit Coordinator">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="leader-form-dept">Department & Year</label>
+              <input type="text" id="leader-form-dept" class="form-input" required placeholder="e.g. CSE | 4th Year">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="leader-form-quote">Quote / Motto</label>
+            <textarea id="leader-form-quote" class="form-textarea" rows="3" required placeholder="e.g. Called to lead, chosen to serve..."></textarea>
+          </div>
+
+          <div class="admin-form-grid">
+            <div class="form-group">
+              <label class="form-label" for="leader-form-email">Email Address</label>
+              <input type="email" id="leader-form-email" class="form-input" placeholder="e.g. albin@ajce.in">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="leader-form-instagram">Instagram Link</label>
+              <input type="text" id="leader-form-instagram" class="form-input" placeholder="e.g. # or Instagram profile URL">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="leader-form-linkedin">LinkedIn Link</label>
+            <input type="text" id="leader-form-linkedin" class="form-input" placeholder="e.g. # or LinkedIn profile URL">
+          </div>
+
+          <div style="display: flex; gap: 15px; margin-top: 20px;">
+            <button type="submit" class="btn-sanctuary btn-primary" style="flex: 1; justify-content: center; border: none; cursor: pointer; padding: 12px 20px;">
+              <i class="fas fa-save"></i> Save Member Details
+            </button>
+            <button type="button" onclick="closeLeaderModal()" class="btn-sanctuary btn-secondary" style="flex: 1; justify-content: center; padding: 12px 20px;">
+              Cancel
+            </button>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Set Year
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    let activeTab = 'updates';
+
+    // Check existing session on load
+    window.addEventListener('DOMContentLoaded', () => {
+      if (sessionStorage.getItem('admin_logged_in') === 'true') {
+        showDashboard();
+      }
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) entry.target.classList.add('is-visible');
+        });
+      }, { threshold: 0.15 });
+      document.querySelectorAll('.reveal-on-scroll').forEach(el => observer.observe(el));
+    });
+
+    // Login logic
+    function handleLoginSubmit(e) {
+      e.preventDefault();
+      const user = document.getElementById('username').value.trim();
+      const pass = document.getElementById('password').value;
+
+      let role = '';
+      if (user === 'Chrismon' && pass === 'chris@2005') {
+        role = 'Unit Coordinator';
+      } else if (user === 'Sneha' && pass === 'sneha@2005') {
+        role = 'Assistant Coordinator';
+      } else if (user === 'Staff' && pass === 'staff@2005') {
+        role = 'Staff Admin';
+      }
+
+      if (role) {
+        sessionStorage.setItem('admin_logged_in', 'true');
+        sessionStorage.setItem('admin_username', user);
+        sessionStorage.setItem('admin_role', role);
+        showDashboard();
+      } else {
+        document.getElementById('login-error').style.display = 'block';
+      }
+    }
+
+    function showDashboard() {
+      document.getElementById('login-section').style.display = 'none';
+      document.getElementById('dashboard-section').style.display = 'block';
+      
+      const username = sessionStorage.getItem('admin_username') || 'Admin';
+      const role = sessionStorage.getItem('admin_role') || 'Staff Admin';
+      
+      document.getElementById('admin-user-display').textContent = `${username} (${role})`;
+      
+      // Control tab visibility based on role
+      const tabTorchbearersBtn = document.getElementById('tab-torchbearers-btn');
+      if (role === 'Unit Coordinator' || role === 'Assistant Coordinator') {
+        tabTorchbearersBtn.style.display = 'flex';
+      } else {
+        tabTorchbearersBtn.style.display = 'none';
+        if (activeTab === 'torchbearers') {
+          switchTab('updates');
+        }
+      }
+      
+      // Load tables/lists
+      renderUpdatesList();
+      renderPrayersList();
+      renderLeadersList();
+    }
+
+    function handleLogout() {
+      sessionStorage.removeItem('admin_logged_in');
+      sessionStorage.removeItem('admin_username');
+      sessionStorage.removeItem('admin_role');
+      window.location.reload();
+    }
+
+    // Switch tab logic
+    function switchTab(tabId) {
+      activeTab = tabId;
+      document.querySelectorAll('.admin-nav-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.admin-tab-pane').forEach(pane => pane.classList.remove('active'));
+
+      if (tabId === 'updates') {
+        document.getElementById('tab-updates-btn').classList.add('active');
+        document.getElementById('tab-updates').classList.add('active');
+      } else if (tabId === 'prayers') {
+        document.getElementById('tab-prayers-btn').classList.add('active');
+        document.getElementById('tab-prayers').classList.add('active');
+      } else if (tabId === 'torchbearers') {
+        document.getElementById('tab-torchbearers-btn').classList.add('active');
+        document.getElementById('tab-torchbearers').classList.add('active');
+      }
+    }
+
+    // Manage announcements updates
+    function getUpdatesData() {
+      // Must match digisquare defaults if empty
+      const defaultUpdates = [
+        {
+          id: 1,
+          category: "event",
+          categoryLabel: "Weekly Gathering",
+          icon: "fa-hands-praying",
+          title: "Campus Gathering",
+          date: "Every Wednesday",
+          time: "4:45 PM",
+          venue: "JY Square",
+          description: "Join us for a peaceful, spirit-filled hour of praise, worship, personal testimonies, and intercessory prayers. All students and staff are welcome!",
+          actionText: "Join Us",
+          actionLink: "contact.html"
+        },
+        {
+          id: 2,
+          category: "event",
+          categoryLabel: "Vigil & Devotional",
+          icon: "fa-cross",
+          title: "College Intercession",
+          date: "Every Tuesday",
+          time: "4:45 PM",
+          venue: "College Chapel",
+          description: "Let's come together in a special hour of prayer to uplift our college, our community, and each other. It's a time to experience God’s presence, share burdens, and grow together in faith.",
+          actionText: "Join Us",
+          actionLink: "contact.html"
+        },
+        {
+          id: 3,
+          category: "event",
+          categoryLabel: "Devotional",
+          icon: "fa-cross",
+          title: "Prolife Rosary",
+          date: "Every Thursday",
+          time: "4:45 PM",
+          venue: "College Chapel",
+          description: "Join us in a sacred moment of prayer, seeking God’s grace and protection for the unborn, for families, and for a culture of life in our community.",
+          actionText: "Join Us",
+          actionLink: "contact.html"
+        },
+        {
+          id: 4,
+          category: "event",
+          categoryLabel: "Pilgrimage",
+          icon: "fa-cross",
+          title: "Bharananganam Pilgrimage'26",
+          date: "9th August 2026",
+          time: "8:00 AM",
+          venue: "St. Alphonsa Shrine, Bharananganam",
+          description: "Join us for the spiritual journey to the land of St. Alphonsa, the first saint from India.",
+          actionText: "Join Us",
+          actionLink: "https://forms.gle/JaqvK37TMVv6h7oK9"
+        }
+      ];
+
+      if (!localStorage.getItem('jy_updates')) {
+        localStorage.setItem('jy_updates', JSON.stringify(defaultUpdates));
+      }
+      return JSON.parse(localStorage.getItem('jy_updates'));
+    }
+
+    function renderUpdatesList() {
+      const items = getUpdatesData();
+      const tbody = document.getElementById('updates-table-body');
+      tbody.innerHTML = '';
+
+      if (items.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: #888; padding: 30px;">No updates found. Click 'Add New Update' to create one.</td></tr>`;
+        return;
+      }
+
+      items.forEach(item => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td style="font-weight: 500; color: var(--charcoal);">${escapeHtml(item.title)}</td>
+          <td><span class="action-badge">${escapeHtml(item.categoryLabel)}</span></td>
+          <td>${escapeHtml(item.date)} (${escapeHtml(item.time)})</td>
+          <td>${escapeHtml(item.venue)}</td>
+          <td style="text-align: center; white-space: nowrap;">
+            <button onclick="openEditModal(${item.id})" class="btn-circle" style="margin-right: 6px;" title="Edit"><i class="fas fa-edit"></i></button>
+            <button onclick="handleDeleteUpdate(${item.id})" class="btn-circle btn-circle-danger" title="Delete"><i class="fas fa-trash-alt"></i></button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // Modal forms controls
+    function openAddModal() {
+      document.getElementById('modal-title').textContent = 'Add Announcement/Event';
+      document.getElementById('update-form').reset();
+      document.getElementById('edit-id').value = '';
+      document.getElementById('update-modal').classList.add('active');
+    }
+
+    function openEditModal(id) {
+      const items = getUpdatesData();
+      const item = items.find(x => x.id === id);
+      if (!item) return;
+
+      document.getElementById('modal-title').textContent = 'Edit Announcement/Event';
+      document.getElementById('edit-id').value = item.id;
+      document.getElementById('form-title').value = item.title;
+      document.getElementById('form-category').value = item.category;
+      document.getElementById('form-label-tag').value = item.categoryLabel;
+      document.getElementById('form-icon').value = item.icon;
+      document.getElementById('form-date').value = item.date;
+      document.getElementById('form-time').value = item.time;
+      document.getElementById('form-venue').value = item.venue;
+      document.getElementById('form-desc').value = item.description;
+      document.getElementById('form-btn-text').value = item.actionText || '';
+      document.getElementById('form-btn-link').value = item.actionLink || '';
+
+      document.getElementById('update-modal').classList.add('active');
+    }
+
+    function closeModal() {
+      document.getElementById('update-modal').classList.remove('active');
+    }
+
+    function handleSaveUpdate(e) {
+      e.preventDefault();
+      const idVal = document.getElementById('edit-id').value;
+      const title = document.getElementById('form-title').value.trim();
+      const category = document.getElementById('form-category').value;
+      const categoryLabel = document.getElementById('form-label-tag').value.trim();
+      const icon = document.getElementById('form-icon').value;
+      const date = document.getElementById('form-date').value.trim();
+      const time = document.getElementById('form-time').value.trim();
+      const venue = document.getElementById('form-venue').value.trim();
+      const description = document.getElementById('form-desc').value.trim();
+      const actionText = document.getElementById('form-btn-text').value.trim() || 'Join Us';
+      const actionLink = document.getElementById('form-btn-link').value.trim() || 'contact.html';
+
+      let items = getUpdatesData();
+
+      if (idVal) {
+        // Edit Mode
+        const id = parseInt(idVal, 10);
+        items = items.map(item => {
+          if (item.id === id) {
+            return { id, category, categoryLabel, icon, title, date, time, venue, description, actionText, actionLink };
+          }
+          return item;
+        });
+      } else {
+        // Add Mode
+        const nextId = items.reduce((max, x) => x.id > max ? x.id : max, 0) + 1;
+        items.push({ id: nextId, category, categoryLabel, icon, title, date, time, venue, description, actionText, actionLink });
+      }
+
+      localStorage.setItem('jy_updates', JSON.stringify(items));
+      closeModal();
+      renderUpdatesList();
+      alert('Announcement successfully saved!');
+    }
+
+    function handleDeleteUpdate(id) {
+      if (confirm('Are you sure you want to delete this announcement?')) {
+        let items = getUpdatesData();
+        items = items.filter(x => x.id !== id);
+        localStorage.setItem('jy_updates', JSON.stringify(items));
+        renderUpdatesList();
+      }
+    }
+
+    // Manage Prayers Requests List
+    function getPrayersData() {
+      return JSON.parse(localStorage.getItem('jy_prayers') || '[]');
+    }
+
+    function renderPrayersList() {
+      const prayers = getPrayersData();
+      const container = document.getElementById('prayers-list-container');
+      container.innerHTML = '';
+
+      if (prayers.length === 0) {
+        container.innerHTML = `
+          <div style="text-align: center; color: #888; padding: 40px; border: 1px dashed var(--border-subtle); border-radius: var(--radius-md); background: var(--bg-light);">
+            <i class="fas fa-hand-holding-heart" style="font-size: 2.5rem; color: var(--border-subtle); margin-bottom: 15px;"></i>
+            <h4>No active prayer requests</h4>
+            <p style="font-size: 0.9rem; margin-top: 5px;">Requests submitted by users through the contact page will appear here.</p>
+          </div>
+        `;
+        return;
+      }
+
+      // Show newest first
+      const sorted = [...prayers].reverse();
+
+      sorted.forEach((prayer, index) => {
+        // Find correct feeling class badge
+        const feeling = prayer.feeling ? prayer.feeling.trim().toLowerCase() : '';
+        let badgeClass = 'badge-other';
+        if (feeling.includes('anxious') || feeling.includes('stress')) badgeClass = 'badge-anxious';
+        else if (feeling.includes('fear') || feeling.includes('scared') || feeling.includes('worry')) badgeClass = 'badge-fear';
+        else if (feeling.includes('grate') || feeling.includes('thank') || feeling.includes('bless')) badgeClass = 'badge-grateful';
+        else if (feeling.includes('sad') || feeling.includes('depress') || feeling.includes('lonely')) badgeClass = 'badge-sad';
+
+        const item = document.createElement('div');
+        item.className = 'prayer-item';
+        // Compute original index in prayers array to delete it correctly
+        const originalIndex = prayers.length - 1 - index;
+
+        item.innerHTML = `
+          <div>
+            <span class="prayer-feeling-badge ${badgeClass}">Feeling: ${escapeHtml(prayer.feeling || 'Other')}</span>
+            <p style="font-size: 1.02rem; font-weight: 500; color: var(--charcoal); margin: 0; line-height: 1.6;">
+              "${escapeHtml(prayer.message)}"
+            </p>
+            <div class="prayer-meta">
+              <i class="far fa-clock"></i> Submitted: ${escapeHtml(prayer.timestamp || 'N/A')}
+            </div>
+          </div>
+          <div class="prayer-actions">
+            <button onclick="deletePrayer(${originalIndex})" class="btn-circle btn-circle-danger" title="Mark Completed / Remove"><i class="fas fa-check"></i></button>
+          </div>
+        `;
+        container.appendChild(item);
+      });
+    }
+
+    function deletePrayer(index) {
+      let prayers = getPrayersData();
+      prayers.splice(index, 1);
+      localStorage.setItem('jy_prayers', JSON.stringify(prayers));
+      renderPrayersList();
+    }
+
+    function clearAllPrayers() {
+      if (confirm('Are you sure you want to permanently clear all prayer requests?')) {
+        localStorage.removeItem('jy_prayers');
+        renderPrayersList();
+      }
+    }
+
+    // Manage Core Leaders (Torchbearers)
+    function getLeadersData() {
+      const defaultLeaders = [
+        {
+          id: 1,
+          initials: "AG",
+          name: "Albin George",
+          role: "Unit Coordinator",
+          dept: "Computer Science & Eng. | 4th Year",
+          quote: "Called to lead, chosen to serve. Let everything we build and share represent Christ's love to our campus.",
+          instagram: "#",
+          linkedin: "#",
+          email: "albin@ajce.in"
+        },
+        {
+          id: 2,
+          initials: "SS",
+          name: "Sneha Susan",
+          role: "Assistant Coordinator",
+          dept: "Electronics & Comm. | 4th Year",
+          quote: "To walk in fellowship, to encourage, and to sustain one another in holy prayer as a family in faith.",
+          instagram: "#",
+          linkedin: "#",
+          email: "sneha@ajce.in"
+        },
+        {
+          id: 3,
+          initials: "JT",
+          name: "Jerin Thomas",
+          role: "Intercession Lead",
+          dept: "Mechanical Engineering | 3rd Year",
+          quote: "Intercession is the silent heartbeat of the Jesus Youth community. Standing in the gap for every soul on campus.",
+          instagram: "#",
+          linkedin: "#",
+          email: "jerin@ajce.in"
+        },
+        {
+          id: 4,
+          initials: "AM",
+          name: "Anjali Maria",
+          role: "Music Coordinator",
+          dept: "Information Technology | 3rd Year",
+          quote: "Worshiping our King through praise and beautiful melodies. Music ministry helps lift hearts to heaven.",
+          instagram: "#",
+          linkedin: "#",
+          email: "anjali@ajce.in"
+        },
+        {
+          id: 5,
+          initials: "TJ",
+          name: "Thomas Joy",
+          role: "Media & Design Lead",
+          dept: "Computer Science & Eng. | 3rd Year",
+          quote: "Crafting a digital sanctuary that brings updates and announcements to your screen with clean aesthetics.",
+          instagram: "#",
+          linkedin: "#",
+          email: "thomas@ajce.in"
+        }
+      ];
+
+      if (!localStorage.getItem('jy_leaders')) {
+        localStorage.setItem('jy_leaders', JSON.stringify(defaultLeaders));
+      }
+      return JSON.parse(localStorage.getItem('jy_leaders'));
+    }
+
+    function renderLeadersList() {
+      const items = getLeadersData();
+      const tbody = document.getElementById('leaders-table-body');
+      tbody.innerHTML = '';
+
+      if (items.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: #888; padding: 30px;">No leadership profiles found.</td></tr>`;
+        return;
+      }
+
+      items.forEach(item => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><span class="action-badge" style="font-family: monospace;">${escapeHtml(item.initials)}</span></td>
+          <td style="font-weight: 500; color: var(--charcoal);">${escapeHtml(item.name)}</td>
+          <td style="font-weight: 500; color: var(--muted-gold);">${escapeHtml(item.role)}</td>
+          <td>${escapeHtml(item.dept)}</td>
+          <td style="max-width: 260px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${escapeHtml(item.quote)}</td>
+          <td style="text-align: center; white-space: nowrap;">
+            <button onclick="openEditLeaderModal(${item.id})" class="btn-circle" title="Edit"><i class="fas fa-edit"></i></button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function openEditLeaderModal(id) {
+      const items = getLeadersData();
+      const item = items.find(x => x.id === id);
+      if (!item) return;
+
+      document.getElementById('edit-leader-id').value = item.id;
+      document.getElementById('leader-form-name').value = item.name;
+      document.getElementById('leader-form-initials').value = item.initials || '';
+      document.getElementById('leader-form-role').value = item.role;
+      document.getElementById('leader-form-dept').value = item.dept;
+      document.getElementById('leader-form-quote').value = item.quote;
+      document.getElementById('leader-form-email').value = item.email || '';
+      document.getElementById('leader-form-instagram').value = item.instagram || '';
+      document.getElementById('leader-form-linkedin').value = item.linkedin || '';
+
+      document.getElementById('leader-modal').classList.add('active');
+    }
+
+    function closeLeaderModal() {
+      document.getElementById('leader-modal').classList.remove('active');
+    }
+
+    function handleSaveLeader(e) {
+      e.preventDefault();
+      const idVal = document.getElementById('edit-leader-id').value;
+      const name = document.getElementById('leader-form-name').value.trim();
+      const initials = document.getElementById('leader-form-initials').value.trim();
+      const role = document.getElementById('leader-form-role').value.trim();
+      const dept = document.getElementById('leader-form-dept').value.trim();
+      const quote = document.getElementById('leader-form-quote').value.trim();
+      const email = document.getElementById('leader-form-email').value.trim();
+      const instagram = document.getElementById('leader-form-instagram').value.trim();
+      const linkedin = document.getElementById('leader-form-linkedin').value.trim();
+
+      let items = getLeadersData();
+      const id = parseInt(idVal, 10);
+
+      items = items.map(item => {
+        if (item.id === id) {
+          return { id, initials, name, role, dept, quote, email, instagram, linkedin };
+        }
+        return item;
+      });
+
+      localStorage.setItem('jy_leaders', JSON.stringify(items));
+      closeLeaderModal();
+      renderLeadersList();
+      alert('Torchbearer details successfully updated!');
+    }
+
+    // Helper functions
+    function escapeHtml(str) {
+      if (!str) return '';
+      return str.replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+    }
+  </script>
+</body>
+</html>

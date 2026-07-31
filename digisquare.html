@@ -208,8 +208,8 @@
         <li><a href="verse.html">Daily Verse</a></li>
         <li><a href="audio.html">Audio Devotionals</a></li>
         <li><a href="saint.html">Saint of the Day</a></li>
-        <li><a href="gallery.html">Gallery</a></li>
         <li><a href="digisquare.html">JY DigiSquare</a></li>
+        <li><a href="torchbearers.html">Meet Torchbearers</a></li>
         <li><a href="contact.html">Contact</a></li>
       </ul>
 
@@ -235,8 +235,8 @@
     // Set Year
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    // Data Source for announcements
-    const updates = [
+    // Default Data Source for announcements
+    const defaultUpdates = [
       {
         id: 1,
         category: "event",
@@ -277,19 +277,25 @@
         actionLink: "contact.html"
       },
       {
-        id: 3,
-        category: "announcement",
+        id: 4,
+        category: "event",
         categoryLabel: "Pilgrimage",
         icon: "fa-cross",
         title: "Bharananganam Pilgrimage'26",
         date: "9th August 2026",
         time: "8:00 AM",
-        venue: "AJCE Campus --> St. Alphonsa Shrine, Bharananganam",
-        description: "Join us for the spiritual journey to land of St, Alphonsa,the first saint from India",
+        venue: "St. Alphonsa Shrine, Bharananganam",
+        description: "Join us for the spiritual journey to the land of St. Alphonsa, the first saint from India.",
         actionText: "Join Us",
-        actionLink: "contact.html"
+        actionLink: "https://forms.gle/JaqvK37TMVv6h7oK9"
       }
     ];
+
+    // Load from localStorage or set defaults
+    if (!localStorage.getItem('jy_updates')) {
+      localStorage.setItem('jy_updates', JSON.stringify(defaultUpdates));
+    }
+    const updates = JSON.parse(localStorage.getItem('jy_updates') || '[]');
 
     let activeFilter = 'all';
     let searchQuery = '';
@@ -323,6 +329,16 @@
         const card = document.createElement('div');
         card.className = 'event-card reveal-on-scroll is-visible';
         
+        // Only render the button if both actionText and actionLink exist
+        let buttonHTML = '';
+        if (item.actionText && item.actionLink) {
+          buttonHTML = `
+            <a href="${item.actionLink}" class="btn-sanctuary btn-secondary" style="margin-top: 20px; width: max-content; padding: 10px 24px;">
+              ${item.actionText}
+            </a>
+          `;
+        }
+        
         card.innerHTML = `
           <div class="update-card">
             <div>
@@ -346,9 +362,7 @@
               </p>
             </div>
             
-            <a href="${item.actionLink}" class="btn-sanctuary btn-secondary" style="margin-top: 20px; width: max-content; padding: 10px 24px;">
-              ${item.actionText}
-            </a>
+            ${buttonHTML}
           </div>
         `;
         grid.appendChild(card);

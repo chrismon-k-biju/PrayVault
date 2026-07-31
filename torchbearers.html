@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meet Torchbearers | Jesus Youth AJCE</title>
+  <meta name="description" content="Meet the executive committee and leadership team coordinating the Jesus Youth community at Amal Jyothi College of Engineering.">
+  <link rel="icon" type="image/png" href="assets/logo.png">
+  
+  <!-- Google Fonts: Playfair Display & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
+
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Main Sanctuary Design System Stylesheet -->
+  <link rel="stylesheet" href="css/sanctuary.css">
+
+  <style>
+    /* Torchbearers Custom Grid Styles */
+    .leaders-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 30px;
+      margin-top: 40px;
+    }
+
+    .leader-card {
+      background: #FFFFFF;
+      border-radius: var(--radius-md);
+      padding: 40px 30px;
+      border: 1px solid var(--border-subtle);
+      box-shadow: var(--card-shadow);
+      transition: var(--transition-smooth);
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .leader-card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--card-shadow-hover);
+    }
+
+    .leader-avatar-container {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background: var(--gold-soft);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 24px;
+      border: 2px solid var(--muted-gold);
+      color: var(--muted-gold);
+      font-size: 2.2rem;
+      transition: var(--transition-smooth);
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+    }
+
+    .leader-card:hover .leader-avatar-container {
+      background: var(--muted-gold);
+      color: white;
+    }
+
+    .leader-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+      color: var(--charcoal);
+    }
+
+    .leader-role {
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--muted-gold);
+      margin-bottom: 10px;
+      letter-spacing: 0.08em;
+    }
+
+    .leader-dept {
+      font-size: 0.9rem;
+      color: #666;
+      margin-bottom: 20px;
+      font-weight: 400;
+    }
+
+    .leader-quote {
+      font-size: 0.94rem;
+      font-style: italic;
+      color: var(--charcoal-light);
+      line-height: 1.6;
+      margin-bottom: 24px;
+      border-top: 1px dashed rgba(35, 83, 71, 0.18);
+      padding-top: 20px;
+      width: 100%;
+      position: relative;
+    }
+
+    .leader-quote::before {
+      content: '"';
+      font-size: 2.5rem;
+      position: absolute;
+      top: 0px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: rgba(35, 83, 71, 0.06);
+      font-family: 'Playfair Display', serif;
+      line-height: 1;
+    }
+
+    .leader-socials {
+      display: flex;
+      gap: 12px;
+      margin-top: auto;
+    }
+
+    .leader-social-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: var(--bg-light);
+      border: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--charcoal-light);
+      font-size: 0.95rem;
+      transition: var(--transition-smooth);
+    }
+
+    .leader-social-btn:hover {
+      background: var(--muted-gold);
+      color: white;
+      border-color: var(--muted-gold);
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Floating Back Button -->
+  <div class="back-home-container">
+    <a href="index.html" class="back-home-link">
+      <i class="fas fa-arrow-left"></i> Back to Sanctuary
+    </a>
+  </div>
+
+  <!-- Header Banner -->
+  <section style="background: var(--soft-cream); padding: 140px 24px 60px 24px; text-align: center;">
+    <span class="section-tag">JY Committee</span>
+    <h1 style="margin-top: 10px;">Meet Torchbearers</h1>
+    <p class="section-subtitle">The leadership team guiding our fellowship, ministries, and community spiritual life.</p>
+  </section>
+
+  <!-- Leaders Section -->
+  <section class="section-wrapper">
+    <div class="leaders-grid" id="leaders-grid">
+      <!-- Rendered dynamically -->
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="sanctuary-footer">
+    <div class="footer-content">
+      <p class="footer-quote">
+        "I am the light of the world. Whoever follows me will never walk in darkness, but will have the light of life."
+        <br><span style="font-size: 0.95rem; color: var(--muted-gold); font-style: normal;">— John 8:12</span>
+      </p>
+
+      <ul class="footer-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="verse.html">Daily Verse</a></li>
+        <li><a href="audio.html">Audio Devotionals</a></li>
+        <li><a href="saint.html">Saint of the Day</a></li>
+        <li><a href="gallery.html">Gallery</a></li>
+        <li><a href="digisquare.html">JY DigiSquare</a></li>
+        <li><a href="torchbearers.html">Meet Torchbearers</a></li>
+        <li><a href="admin.html">Admin</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+
+      <div class="footer-socials">
+        <a href="https://instagram.com" target="_blank" rel="noopener" class="social-icon-btn" aria-label="Instagram">
+          <i class="fab fa-instagram"></i>
+        </a>
+        <a href="https://youtube.com" target="_blank" rel="noopener" class="social-icon-btn" aria-label="YouTube">
+          <i class="fab fa-youtube"></i>
+        </a>
+        <a href="mailto:jy@ajce.in" class="social-icon-btn" aria-label="Email">
+          <i class="fas fa-envelope"></i>
+        </a>
+      </div>
+
+      <div class="footer-copy">
+        &copy; <span id="year">2026</span> Jesus Youth Amal Jyothi College of Engineering. All rights reserved.
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Set Year
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Default leaders definition
+    const defaultLeaders = [
+      {
+        id: 1,
+        initials: "AG",
+        name: "Albin George",
+        role: "Unit Coordinator",
+        dept: "Computer Science & Eng. | 4th Year",
+        quote: "Called to lead, chosen to serve. Let everything we build and share represent Christ's love to our campus.",
+        instagram: "#",
+        linkedin: "#",
+        email: "albin@ajce.in"
+      },
+      {
+        id: 2,
+        initials: "SS",
+        name: "Sneha Susan",
+        role: "Assistant Coordinator",
+        dept: "Electronics & Comm. | 4th Year",
+        quote: "To walk in fellowship, to encourage, and to sustain one another in holy prayer as a family in faith.",
+        instagram: "#",
+        linkedin: "#",
+        email: "sneha@ajce.in"
+      },
+      {
+        id: 3,
+        initials: "JT",
+        name: "Jerin Thomas",
+        role: "Intercession Lead",
+        dept: "Mechanical Engineering | 3rd Year",
+        quote: "Intercession is the silent heartbeat of the Jesus Youth community. Standing in the gap for every soul on campus.",
+        instagram: "#",
+        linkedin: "#",
+        email: "jerin@ajce.in"
+      },
+      {
+        id: 4,
+        initials: "AM",
+        name: "Anjali Maria",
+        role: "Music Coordinator",
+        dept: "Information Technology | 3rd Year",
+        quote: "Worshiping our King through praise and beautiful melodies. Music ministry helps lift hearts to heaven.",
+        instagram: "#",
+        linkedin: "#",
+        email: "anjali@ajce.in"
+      },
+      {
+        id: 5,
+        initials: "TJ",
+        name: "Thomas Joy",
+        role: "Media & Design Lead",
+        dept: "Computer Science & Eng. | 3rd Year",
+        quote: "Crafting a digital sanctuary that brings updates and announcements to your screen with clean aesthetics.",
+        instagram: "#",
+        linkedin: "#",
+        email: "thomas@ajce.in"
+      }
+    ];
+
+    // Load from localStorage or set defaults
+    if (!localStorage.getItem('jy_leaders')) {
+      localStorage.setItem('jy_leaders', JSON.stringify(defaultLeaders));
+    }
+    const leaders = JSON.parse(localStorage.getItem('jy_leaders') || '[]');
+
+    // Render function
+    function renderLeaders() {
+      const grid = document.getElementById('leaders-grid');
+      grid.innerHTML = '';
+
+      leaders.forEach(leader => {
+        const card = document.createElement('div');
+        card.className = 'leader-card reveal-on-scroll is-visible';
+        
+        const initials = leader.initials || getInitials(leader.name);
+
+        card.innerHTML = `
+          <div class="leader-avatar-container">
+            ${escapeHtml(initials)}
+          </div>
+          <h3 class="leader-name">${escapeHtml(leader.name)}</h3>
+          <div class="leader-role">${escapeHtml(leader.role)}</div>
+          <div class="leader-dept">${escapeHtml(leader.dept)}</div>
+          <p class="leader-quote">
+            ${escapeHtml(leader.quote)}
+          </p>
+          <div class="leader-socials">
+            ${leader.instagram ? `<a href="${escapeHtml(leader.instagram)}" class="leader-social-btn" aria-label="Instagram"><i class="fab fa-instagram"></i></a>` : ''}
+            ${leader.linkedin ? `<a href="${escapeHtml(leader.linkedin)}" class="leader-social-btn" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>` : ''}
+            ${leader.email ? `<a href="mailto:${escapeHtml(leader.email)}" class="leader-social-btn" aria-label="Email"><i class="fas fa-envelope"></i></a>` : ''}
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    function getInitials(name) {
+      if (!name) return 'JY';
+      return name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return str.replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+    }
+
+    // Run on load
+    window.addEventListener('DOMContentLoaded', () => {
+      renderLeaders();
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) entry.target.classList.add('is-visible');
+        });
+      }, { threshold: 0.15 });
+    });
+  </script>
+</body>
+</html>
