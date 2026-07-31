@@ -12,8 +12,8 @@
   <!-- Google Fonts: Playfair Display & Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400;1,600&display=swap"
+    <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400;1,600&display=swap"
     rel="stylesheet">
 
   <!-- FontAwesome Icons -->
@@ -214,7 +214,9 @@
     </div>
   </footer>
 
-  <script>
+  <script type="module">
+    import { db, collection, getDocs, doc, setDoc } from './scripts/firebase.js';
+
     // Set Year
     document.getElementById('year').textContent = new Date().getFullYear();
 
@@ -268,46 +270,32 @@
       }
     ];
 
-    // Load from localStorage or set defaults
-    if (!localStorage.getItem('jy_updates')) {
-      localStorage.setItem('jy_updates', JSON.stringify(defaultUpdates));
-    } else {
-      // Sync local storage in case default updates were modified in source code (e.g. category, title, text, removing buttons)
-      let currentUpdates = JSON.parse(localStorage.getItem('jy_updates') || '[]');
-      let modified = false;
-      
-      currentUpdates = currentUpdates.map(item => {
-        const defaultItem = defaultUpdates.find(d => d.id === item.id);
-        if (defaultItem) {
-          // Sync category if it differs
-          if (item.category !== defaultItem.category) {
-            item.category = defaultItem.category;
-            modified = true;
-          }
-          // Sync text details
-          if (item.categoryLabel !== defaultItem.categoryLabel) { item.categoryLabel = defaultItem.categoryLabel; modified = true; }
-          if (item.icon !== defaultItem.icon) { item.icon = defaultItem.icon; modified = true; }
-          if (item.title !== defaultItem.title) { item.title = defaultItem.title; modified = true; }
-          if (item.description !== defaultItem.description) { item.description = defaultItem.description; modified = true; }
-          if (item.date !== defaultItem.date) { item.date = defaultItem.date; modified = true; }
-          if (item.time !== defaultItem.time) { item.time = defaultItem.time; modified = true; }
-          if (item.venue !== defaultItem.venue) { item.venue = defaultItem.venue; modified = true; }
-
-          // Sync button removal
-          if (!defaultItem.actionText && item.actionText) { delete item.actionText; modified = true; }
-          if (!defaultItem.actionLink && item.actionLink) { delete item.actionLink; modified = true; }
-        }
-        return item;
-      });
-      
-      if (modified) {
-        localStorage.setItem('jy_updates', JSON.stringify(currentUpdates));
-      }
-    }
-    const updates = JSON.parse(localStorage.getItem('jy_updates') || '[]');
-
+    let updates = [];
     let activeFilter = 'all';
     let searchQuery = '';
+
+    async function loadUpdates() {
+      try {
+        const querySnapshot = await getDocs(collection(db, "updates"));
+        if (querySnapshot.empty) {
+          console.log("Firestore empty. Seeding default updates...");
+          for (const item of defaultUpdates) {
+            await setDoc(doc(db, "updates", String(item.id)), item);
+          }
+          updates = [...defaultUpdates];
+        } else {
+          updates = [];
+          querySnapshot.forEach((doc) => {
+            updates.push({ ...doc.data(), id: doc.id });
+          });
+          updates.sort((a, b) => Number(a.id) - Number(b.id));
+        }
+      } catch (error) {
+        console.error("Firestore error, loading from local defaults:", error);
+        updates = [...defaultUpdates];
+      }
+      renderUpdates();
+    }
 
     // Render Function
     function renderUpdates() {
@@ -401,9 +389,12 @@
       renderUpdates();
     }
 
+    window.filterCategory = filterCategory;
+    window.handleSearch = handleSearch;
+
     // Initial render
     window.addEventListener('DOMContentLoaded', () => {
-      renderUpdates();
+      loadUpdates();
 
       const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {

@@ -10,7 +10,9 @@
   <!-- Google Fonts: Playfair Display & Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
+    <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400;1,600&display=swap"
+    rel="stylesheet">
 
   <!-- FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -28,118 +30,121 @@
     }
 
     .leader-card {
-      background: #FFFFFF;
-      border-radius: var(--radius-md);
+      background: rgba(255, 255, 255, 0.65);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-radius: var(--radius-lg);
       padding: 40px 30px;
-      border: 1px solid var(--border-subtle);
-      box-shadow: var(--card-shadow);
-      transition: var(--transition-smooth);
+      border: 1px solid rgba(255, 255, 255, 0.7);
+      box-shadow: 0 10px 30px rgba(35, 83, 71, 0.04);
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
       text-align: center;
       display: flex;
       flex-direction: column;
       align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .leader-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: var(--avatar-border, var(--muted-gold));
+      opacity: 0.8;
     }
 
     .leader-card:hover {
-      transform: translateY(-6px);
-      box-shadow: var(--card-shadow-hover);
+      transform: translateY(-8px) scale(1.01);
+      box-shadow: 0 20px 40px rgba(35, 83, 71, 0.1);
+      border-color: rgba(255, 255, 255, 0.9);
+      background: rgba(255, 255, 255, 0.85);
     }
 
     .leader-avatar-container {
       width: 100px;
       height: 100px;
       border-radius: 50%;
-      background: var(--gold-soft);
+      background: var(--avatar-bg, var(--gold-soft));
       display: flex;
       align-items: center;
       justify-content: center;
       margin-bottom: 24px;
-      border: 2px solid var(--muted-gold);
-      color: var(--muted-gold);
+      border: 2px solid var(--avatar-border, var(--muted-gold));
+      color: var(--avatar-text, var(--muted-gold));
       font-size: 2.2rem;
-      transition: var(--transition-smooth);
-      font-family: 'Topaz', 'Playfair Display', serif;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      font-family: 'Bezoria', 'Playfair Display', serif;
       font-weight: 700;
+      box-shadow: 0 8px 24px rgba(35, 83, 71, 0.08);
     }
 
     .leader-card:hover .leader-avatar-container {
-      background: var(--muted-gold);
-      color: white;
+      background: var(--avatar-border, var(--muted-gold));
+      color: var(--avatar-hover-text, white);
+      transform: scale(1.06) rotate(5deg);
+      box-shadow: 0 12px 30px rgba(35, 83, 71, 0.15);
     }
 
     .leader-name {
-      font-family: 'Topaz', 'Playfair Display', serif;
-      font-size: 1.4rem;
+      font-family: 'Bezoria', 'Playfair Display', serif;
+      font-size: 1.45rem;
       font-weight: 600;
-      margin-bottom: 4px;
+      margin-bottom: 6px;
       color: var(--charcoal);
+      letter-spacing: -0.01em;
     }
 
     .leader-role {
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       font-weight: 700;
       text-transform: uppercase;
       color: var(--muted-gold);
       margin-bottom: 10px;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.1em;
+      background: rgba(212, 175, 55, 0.06);
+      padding: 4px 14px;
+      border-radius: 20px;
+      display: inline-block;
     }
 
     .leader-dept {
-      font-size: 0.9rem;
+      font-size: 0.88rem;
       color: #666;
       margin-bottom: 20px;
       font-weight: 400;
     }
 
-    .leader-quote {
-      font-size: 0.94rem;
-      font-style: italic;
-      color: var(--charcoal-light);
-      line-height: 1.6;
-      margin-bottom: 24px;
-      border-top: 1px dashed rgba(35, 83, 71, 0.18);
-      padding-top: 20px;
-      width: 100%;
-      position: relative;
-    }
-
-    .leader-quote::before {
-      content: '"';
-      font-size: 2.5rem;
-      position: absolute;
-      top: 0px;
-      left: 50%;
-      transform: translateX(-50%);
-      color: rgba(35, 83, 71, 0.06);
-      font-family: 'Topaz', 'Playfair Display', serif;
-      line-height: 1;
-    }
-
-    .leader-socials {
-      display: flex;
-      gap: 12px;
+    .leader-phone-btn {
+      background: rgba(212, 175, 55, 0.06);
+      border: 1px solid rgba(212, 175, 55, 0.2);
+      padding: 8px 18px;
+      border-radius: 30px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      color: var(--muted-gold);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      justify-content: center;
       margin-top: auto;
     }
 
-    .leader-social-btn {
-      width: 38px;
-      height: 38px;
-      border-radius: 50%;
-      background: var(--bg-light);
-      border: 1px solid var(--border-subtle);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--charcoal-light);
-      font-size: 0.95rem;
-      transition: var(--transition-smooth);
-    }
-
-    .leader-social-btn:hover {
+    .leader-phone-btn:hover {
       background: var(--muted-gold);
       color: white;
       border-color: var(--muted-gold);
-      transform: scale(1.05);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(212, 175, 55, 0.15);
+    }
+
+    .leader-phone-btn i {
+      font-size: 0.8rem;
     }
   </style>
 </head>
@@ -199,74 +204,62 @@
     </div>
   </footer>
 
-  <script>
+  <script type="module">
+    import { db, collection, getDocs, doc, setDoc } from './scripts/firebase.js';
+
     // Set Year
     document.getElementById('year').textContent = new Date().getFullYear();
+    let leaders = [];
 
-    // Default leaders definition
-    const defaultLeaders = [
-      {
-        id: 1,
-        initials: "AG",
-        name: "Albin George",
-        role: "Unit Coordinator",
-        dept: "Computer Science & Eng. | 4th Year",
-        quote: "Called to lead, chosen to serve. Let everything we build and share represent Christ's love to our campus.",
-        instagram: "#",
-        linkedin: "#",
-        email: "albin@ajce.in"
-      },
-      {
-        id: 2,
-        initials: "SS",
-        name: "Sneha Susan",
-        role: "Assistant Coordinator",
-        dept: "Electronics & Comm. | 4th Year",
-        quote: "To walk in fellowship, to encourage, and to sustain one another in holy prayer as a family in faith.",
-        instagram: "#",
-        linkedin: "#",
-        email: "sneha@ajce.in"
-      },
-      {
-        id: 3,
-        initials: "JT",
-        name: "Jerin Thomas",
-        role: "Intercession Lead",
-        dept: "Mechanical Engineering | 3rd Year",
-        quote: "Intercession is the silent heartbeat of the Jesus Youth community. Standing in the gap for every soul on campus.",
-        instagram: "#",
-        linkedin: "#",
-        email: "jerin@ajce.in"
-      },
-      {
-        id: 4,
-        initials: "AM",
-        name: "Anjali Maria",
-        role: "Music Coordinator",
-        dept: "Information Technology | 3rd Year",
-        quote: "Worshiping our King through praise and beautiful melodies. Music ministry helps lift hearts to heaven.",
-        instagram: "#",
-        linkedin: "#",
-        email: "anjali@ajce.in"
-      },
-      {
-        id: 5,
-        initials: "TJ",
-        name: "Thomas Joy",
-        role: "Media & Design Lead",
-        dept: "Computer Science & Eng. | 3rd Year",
-        quote: "Crafting a digital sanctuary that brings updates and announcements to your screen with clean aesthetics.",
-        instagram: "#",
-        linkedin: "#",
-        email: "thomas@ajce.in"
+    async function loadLeaders() {
+      try {
+        const querySnapshot = await getDocs(collection(db, "leaders"));
+        leaders = [];
+        querySnapshot.forEach((doc) => {
+          leaders.push({ ...doc.data(), id: doc.id });
+        });
+        leaders.sort((a, b) => {
+          const roleA = (a.role || '').toLowerCase();
+          const roleB = (b.role || '').toLowerCase();
+          
+          const isSpecialA = roleA.includes('chaplin') || roleA.includes('chaplain') || roleA.includes('elder');
+          const isSpecialB = roleB.includes('chaplin') || roleB.includes('chaplain') || roleB.includes('elder');
+          
+          if (isSpecialA && !isSpecialB) return -1;
+          if (!isSpecialA && isSpecialB) return 1;
+          
+          if (isSpecialA && isSpecialB) {
+            const isChapA = roleA.includes('chaplin') || roleA.includes('chaplain');
+            const isChapB = roleB.includes('chaplin') || roleB.includes('chaplain');
+            if (isChapA && !isChapB) return -1;
+            if (!isChapA && isChapB) return 1;
+          }
+          
+          return Number(a.id) - Number(b.id);
+        });
+      } catch (error) {
+        console.error("Firestore error loading leaders:", error);
+        leaders = [];
       }
+      renderLeaders();
+    }
+
+    const badgeColors = [
+      { bg: 'linear-gradient(135deg, #1A362D 0%, #2A5647 100%)', text: '#FAF6ED', border: '#D4AF37' }, // Sage/Gold
+      { bg: 'linear-gradient(135deg, #4A3B32 0%, #6E5B4F 100%)', text: '#FAF6ED', border: '#B58A63' }, // Copper Clay
+      { bg: 'linear-gradient(135deg, #2D4059 0%, #3B536F 100%)', text: '#FAF6ED', border: '#D4AF37' }, // Steel Blue
+      { bg: 'linear-gradient(135deg, #5C3D46 0%, #7E5A65 100%)', text: '#FAF6ED', border: '#B58A63' }, // Crimson Rose
+      { bg: 'linear-gradient(135deg, #3C4F46 0%, #526E60 100%)', text: '#FAF6ED', border: '#7FA392' }  // Pale Forest
     ];
 
-    // Load from localStorage or set defaults
-    if (!localStorage.getItem('jy_leaders')) {
-      localStorage.setItem('jy_leaders', JSON.stringify(defaultLeaders));
+    function hashCode(str) {
+      let hash = 0;
+      if (!str) return hash;
+      for (let i = 0; i < str.length; i++) {
+        hash = str.charCodeAt(i) + ((hash << 5) - hash);
+      }
+      return hash;
     }
-    const leaders = JSON.parse(localStorage.getItem('jy_leaders') || '[]');
 
     // Render function
     function renderLeaders() {
@@ -278,22 +271,17 @@
         card.className = 'leader-card reveal-on-scroll is-visible';
         
         const initials = leader.initials || getInitials(leader.name);
+        const colorIndex = Math.abs(hashCode(leader.name)) % badgeColors.length;
+        const badge = badgeColors[colorIndex];
 
         card.innerHTML = `
-          <div class="leader-avatar-container">
+          <div class="leader-avatar-container" style="--avatar-bg: ${badge.bg}; --avatar-text: ${badge.text}; --avatar-border: ${badge.border};">
             ${escapeHtml(initials)}
           </div>
           <h3 class="leader-name">${escapeHtml(leader.name)}</h3>
-          <div class="leader-role">${escapeHtml(leader.role)}</div>
-          <div class="leader-dept">${escapeHtml(leader.dept)}</div>
-          <p class="leader-quote">
-            ${escapeHtml(leader.quote)}
-          </p>
-          <div class="leader-socials">
-            ${leader.instagram ? `<a href="${escapeHtml(leader.instagram)}" class="leader-social-btn" aria-label="Instagram"><i class="fab fa-instagram"></i></a>` : ''}
-            ${leader.linkedin ? `<a href="${escapeHtml(leader.linkedin)}" class="leader-social-btn" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>` : ''}
-            ${leader.email ? `<a href="mailto:${escapeHtml(leader.email)}" class="leader-social-btn" aria-label="Email"><i class="fas fa-envelope"></i></a>` : ''}
-          </div>
+          <div style="margin-bottom: 10px;"><span class="leader-role">${escapeHtml(leader.role)}</span></div>
+          ${leader.dept && initials !== 'Fr.' ? `<div class="leader-dept">${escapeHtml(leader.dept)}</div>` : ''}
+          ${leader.phone ? `<a href="tel:${escapeHtml(leader.phone)}" class="leader-phone-btn"><i class="fas fa-phone"></i> ${escapeHtml(leader.phone)}</a>` : ''}
         `;
         grid.appendChild(card);
       });
@@ -301,6 +289,8 @@
 
     function getInitials(name) {
       if (!name) return 'JY';
+      const parts = name.trim().split(/\s+/);
+      if (parts[0] && parts[0].toLowerCase().replace(/\./g, '') === 'fr') return 'Fr.';
       return name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
     }
 
@@ -315,7 +305,7 @@
 
     // Run on load
     window.addEventListener('DOMContentLoaded', () => {
-      renderLeaders();
+      loadLeaders();
 
       const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {

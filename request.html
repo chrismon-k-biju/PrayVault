@@ -10,8 +10,8 @@
   <link rel="icon" type="image/png" href="assets/meta_icon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400;1,600&display=swap"
+    <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400;1,600&display=swap"
     rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="css/sanctuary.css">
@@ -54,7 +54,7 @@
         </div>
 
         <button type="submit" class="btn-sanctuary btn-primary" style="width: 100%; justify-content: center;">
-          <i class="fas fa-paper-plane"></i> Send Intentions
+          <i class="fas fa-paper-plane"></i> Submit Now
         </button>
       </form>
     </div>
@@ -93,22 +93,38 @@
     </div>
   </footer>
 
-  <script>
+  <script type="module">
+    import { db, collection, addDoc } from './scripts/firebase.js';
+
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    function handleFormSubmit(event) {
+    async function handleFormSubmit(event) {
       event.preventDefault();
       const feeling = document.getElementById('contact-feeling').value;
       const message = document.getElementById('contact-message').value;
       const timestamp = new Date().toLocaleString();
 
-      let prayers = JSON.parse(localStorage.getItem('jy_prayers') || '[]');
-      prayers.push({ feeling, message, timestamp });
-      localStorage.setItem('jy_prayers', JSON.stringify(prayers));
-
-      alert('Thank you for sharing your prayer request. Your intentions will be remembered in our weekly prayer meeting.');
-      event.target.reset();
+      try {
+        await addDoc(collection(db, "prayers"), {
+          feeling: feeling,
+          message: message,
+          timestamp: timestamp,
+          completed: false
+        });
+        alert('Thank you for sharing your prayer request. Your intentions will be remembered in our weekly prayer meeting.');
+        event.target.reset();
+      } catch (error) {
+        console.error("Error saving to Firestore: ", error);
+        // Fallback to localStorage
+        let prayers = JSON.parse(localStorage.getItem('jy_prayers') || '[]');
+        prayers.push({ feeling, message, timestamp });
+        localStorage.setItem('jy_prayers', JSON.stringify(prayers));
+        alert('Thank you for sharing your prayer request. Your intentions will be remembered in our weekly prayer meeting. (Saved locally)');
+        event.target.reset();
+      }
     }
+
+    window.handleFormSubmit = handleFormSubmit;
 
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
