@@ -1,16 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>JY DigiSquare | Jesus Youth AJCE</title>
-  <meta name="description" content="Stay updated with the latest announcements, news, and events from the Jesus Youth community at Amal Jyothi College of Engineering.">
-  <link rel="icon" type="image/png" href="assets/logo.png">
-  
+  <meta name="description"
+    content="Stay updated with the latest announcements, news, and events from the Jesus Youth community at Amal Jyothi College of Engineering.">
+  <link rel="icon" type="image/png" href="assets/meta_icon.png">
+
   <!-- Google Fonts: Playfair Display & Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400;1,600&display=swap"
+    rel="stylesheet">
 
   <!-- FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -50,7 +54,8 @@
       box-shadow: 0 2px 8px rgba(5, 31, 32, 0.02);
     }
 
-    .filter-btn:hover, .filter-btn.active {
+    .filter-btn:hover,
+    .filter-btn.active {
       background: var(--muted-gold);
       color: white;
       border-color: var(--muted-gold);
@@ -129,12 +134,14 @@
         flex-direction: column;
         align-items: stretch;
       }
+
       .search-box-wrapper {
         max-width: 100%;
       }
     }
   </style>
 </head>
+
 <body>
 
   <!-- Floating Back Button -->
@@ -163,34 +170,14 @@
 
       <div class="search-box-wrapper">
         <i class="fas fa-search search-icon"></i>
-        <input type="text" id="search-input" class="search-input" placeholder="Search announcements..." oninput="handleSearch()">
+        <input type="text" id="search-input" class="search-input" placeholder="Search announcements..."
+          oninput="handleSearch()">
       </div>
     </div>
 
     <!-- Announcements Grid -->
     <div class="events-grid" id="updates-grid">
       <!-- Generated dynamically by JS -->
-    </div>
-  </section>
-
-  <!-- Newsletter / Alert Subscription -->
-  <section class="section-wrapper" style="background: var(--soft-cream); border-radius: var(--radius-lg); margin: 60px auto 100px auto; max-width: 850px; padding: 50px 30px; text-align: center;">
-    <div style="max-width: 600px; margin: 0 auto;" class="reveal-on-scroll">
-      <span class="section-tag" style="background: white;">Stay Informed</span>
-      <h2 style="font-size: 2.2rem; margin-top: 10px; margin-bottom: 12px;">Get Live Announcements</h2>
-      <p style="font-size: 1rem; color: var(--charcoal-light); margin-bottom: 30px; line-height: 1.7;">
-        Subscribe to receive real-time email notifications whenever new weekly meetings, events, or updates are posted.
-      </p>
-      
-      <form id="subscribe-form" style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;" onsubmit="handleSubscribe(event)">
-        <input type="email" id="subscribe-email" placeholder="Enter your email address" required style="padding: 14px 24px; border-radius: 30px; border: 1px solid var(--border-subtle); outline: none; width: 100%; max-width: 340px; font-family: 'Inter', sans-serif; font-size: 0.95rem; box-shadow: 0 2px 8px rgba(5, 31, 32, 0.02);">
-        <button type="submit" class="btn-sanctuary btn-primary" style="padding: 14px 32px; border-radius: 30px; border: none; cursor: pointer; font-weight: 600; font-size: 0.95rem; box-shadow: 0 4px 12px rgba(35, 83, 71, 0.2);">
-          <i class="fas fa-paper-plane" style="margin-right: 6px;"></i> Subscribe
-        </button>
-      </form>
-      <div id="subscribe-success" style="display: none; margin-top: 20px; color: var(--muted-gold); font-weight: 600; font-size: 1.1rem; align-items: center; justify-content: center; gap: 8px;">
-        <i class="fas fa-check-circle" style="font-size: 1.3rem;"></i> Thank you! You've successfully subscribed to JY DigiSquare.
-      </div>
     </div>
   </section>
 
@@ -204,13 +191,12 @@
 
       <ul class="footer-links">
         <li><a href="index.html">Home</a></li>
-        <li><a href="about.html">About</a></li>
         <li><a href="verse.html">Daily Verse</a></li>
-        <li><a href="audio.html">Audio Devotionals</a></li>
-        <li><a href="saint.html">Saint of the Day</a></li>
+        <li><a href="kindle.html">Prayer Kindle</a></li>
+        <li><a href="saint.html">Daily Saint</a></li>
         <li><a href="digisquare.html">JY DigiSquare</a></li>
         <li><a href="torchbearers.html">Meet Torchbearers</a></li>
-        <li><a href="contact.html">Contact</a></li>
+        <li><a href="admin.html">Admin</a></li>
       </ul>
 
       <div class="footer-socials">
@@ -246,9 +232,7 @@
         date: "Every Wednesday",
         time: "4:45 PM",
         venue: "JY Square",
-        description: "Join us for a peaceful, spirit-filled hour of praise, worship, personal testimonies, and intercessory prayers. All students and staff are welcome!",
-        actionText: "Join Us",
-        actionLink: "contact.html"
+        description: "Join us for a peaceful, spirit-filled hour of praise, worship, personal testimonies, and intercessory prayers. All students and staff are welcome!"
       },
       {
         id: 2,
@@ -259,9 +243,7 @@
         date: "Every Tuesday",
         time: "4:45 PM",
         venue: "College Chapel",
-        description: "Let's come together in a special hour of prayer to uplift our college, our community, and each other. It's a time to experience God’s presence, share burdens, and grow together in faith.",
-        actionText: "Join Us",
-        actionLink: "contact.html"
+        description: "Let's come together in a special hour of prayer to uplift our college, our community, and each other. It's a time to experience God’s presence, share burdens, and grow together in faith."
       },
       {
         id: 3,
@@ -272,13 +254,11 @@
         date: "Every Thursday",
         time: "4:45 PM",
         venue: "College Chapel",
-        description: "Join us in a sacred moment of prayer, seeking God’s grace and protection for the unborn, for families, and for a culture of life in our community.",
-        actionText: "Join Us",
-        actionLink: "contact.html"
+        description: "Join us in a sacred moment of prayer, seeking God’s grace and protection for the unborn, for families, and for a culture of life in our community."
       },
       {
         id: 4,
-        category: "event",
+        category: "announcement",
         categoryLabel: "Pilgrimage",
         icon: "fa-cross",
         title: "Bharananganam Pilgrimage'26",
@@ -294,6 +274,38 @@
     // Load from localStorage or set defaults
     if (!localStorage.getItem('jy_updates')) {
       localStorage.setItem('jy_updates', JSON.stringify(defaultUpdates));
+    } else {
+      // Sync local storage in case default updates were modified in source code (e.g. category, title, text, removing buttons)
+      let currentUpdates = JSON.parse(localStorage.getItem('jy_updates') || '[]');
+      let modified = false;
+      
+      currentUpdates = currentUpdates.map(item => {
+        const defaultItem = defaultUpdates.find(d => d.id === item.id);
+        if (defaultItem) {
+          // Sync category if it differs
+          if (item.category !== defaultItem.category) {
+            item.category = defaultItem.category;
+            modified = true;
+          }
+          // Sync text details
+          if (item.categoryLabel !== defaultItem.categoryLabel) { item.categoryLabel = defaultItem.categoryLabel; modified = true; }
+          if (item.icon !== defaultItem.icon) { item.icon = defaultItem.icon; modified = true; }
+          if (item.title !== defaultItem.title) { item.title = defaultItem.title; modified = true; }
+          if (item.description !== defaultItem.description) { item.description = defaultItem.description; modified = true; }
+          if (item.date !== defaultItem.date) { item.date = defaultItem.date; modified = true; }
+          if (item.time !== defaultItem.time) { item.time = defaultItem.time; modified = true; }
+          if (item.venue !== defaultItem.venue) { item.venue = defaultItem.venue; modified = true; }
+
+          // Sync button removal
+          if (!defaultItem.actionText && item.actionText) { delete item.actionText; modified = true; }
+          if (!defaultItem.actionLink && item.actionLink) { delete item.actionLink; modified = true; }
+        }
+        return item;
+      });
+      
+      if (modified) {
+        localStorage.setItem('jy_updates', JSON.stringify(currentUpdates));
+      }
     }
     const updates = JSON.parse(localStorage.getItem('jy_updates') || '[]');
 
@@ -308,9 +320,9 @@
       const filtered = updates.filter(item => {
         const matchesCategory = activeFilter === 'all' || item.category === activeFilter;
         const matchesSearch = item.title.toLowerCase().includes(searchQuery) ||
-                              item.description.toLowerCase().includes(searchQuery) ||
-                              item.categoryLabel.toLowerCase().includes(searchQuery) ||
-                              item.venue.toLowerCase().includes(searchQuery);
+          item.description.toLowerCase().includes(searchQuery) ||
+          item.categoryLabel.toLowerCase().includes(searchQuery) ||
+          item.venue.toLowerCase().includes(searchQuery);
         return matchesCategory && matchesSearch;
       });
 
@@ -328,7 +340,7 @@
       filtered.forEach(item => {
         const card = document.createElement('div');
         card.className = 'event-card reveal-on-scroll is-visible';
-        
+
         // Only render the button if both actionText and actionLink exist
         let buttonHTML = '';
         if (item.actionText && item.actionLink) {
@@ -338,7 +350,7 @@
             </a>
           `;
         }
-        
+
         card.innerHTML = `
           <div class="update-card">
             <div>
@@ -372,13 +384,13 @@
     // Filter Function
     function filterCategory(category) {
       activeFilter = category;
-      
+
       // Update buttons active class
       const buttons = document.querySelectorAll('.filter-btn');
       buttons.forEach(btn => btn.classList.remove('active'));
-      
+
       // Find matching button
-      const clickedBtn = Array.from(buttons).find(btn => 
+      const clickedBtn = Array.from(buttons).find(btn =>
         btn.getAttribute('onclick').includes(`'${category}'`)
       );
       if (clickedBtn) clickedBtn.classList.add('active');
@@ -390,25 +402,6 @@
     function handleSearch() {
       searchQuery = document.getElementById('search-input').value.toLowerCase();
       renderUpdates();
-    }
-
-    // Subscribe Function
-    function handleSubscribe(e) {
-      e.preventDefault();
-      const email = document.getElementById('subscribe-email').value;
-      if (email) {
-        // Save to localStorage just for mockup functionality
-        let subscribers = JSON.parse(localStorage.getItem('jy_subscribers') || '[]');
-        if (!subscribers.includes(email)) {
-          subscribers.push(email);
-          localStorage.setItem('jy_subscribers', JSON.stringify(subscribers));
-        }
-
-        // Show success state
-        document.getElementById('subscribe-form').style.display = 'none';
-        const successDiv = document.getElementById('subscribe-success');
-        successDiv.style.display = 'flex';
-      }
     }
 
     // Initial render
@@ -424,4 +417,5 @@
     });
   </script>
 </body>
+
 </html>

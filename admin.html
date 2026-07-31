@@ -1,15 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin Portal | Jesus Youth AJCE</title>
-  <link rel="icon" type="image/png" href="assets/logo.png">
-  
+  <link rel="icon" type="image/png" href="assets/meta_icon.png">
+
   <!-- Google Fonts: Playfair Display & Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400;1,600&display=swap"
+    rel="stylesheet">
 
   <!-- FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -39,7 +42,8 @@
 
     /* Tabs Layout */
     .admin-dashboard {
-      display: none; /* Shown dynamically when authenticated */
+      display: none;
+      /* Shown dynamically when authenticated */
       background: white;
       border: 1px solid var(--border-subtle);
       border-radius: var(--radius-lg);
@@ -150,11 +154,30 @@
       letter-spacing: 0.05em;
     }
 
-    .badge-anxious { background: #fee2e2; color: #991b1b; }
-    .badge-fear { background: #ffedd5; color: #9a3412; }
-    .badge-grateful { background: #dcfce7; color: #166534; }
-    .badge-sad { background: #e0f2fe; color: #075985; }
-    .badge-other { background: #f3f4f6; color: #374151; }
+    .badge-anxious {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    .badge-fear {
+      background: #ffedd5;
+      color: #9a3412;
+    }
+
+    .badge-grateful {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .badge-sad {
+      background: #e0f2fe;
+      color: #075985;
+    }
+
+    .badge-other {
+      background: #f3f4f6;
+      color: #374151;
+    }
 
     .prayer-meta {
       font-size: 0.8rem;
@@ -173,15 +196,19 @@
       .admin-form-grid {
         grid-template-columns: 1fr;
       }
+
       .admin-content {
         padding: 20px;
       }
+
       .admin-header {
         padding: 20px;
       }
+
       .prayer-item {
         flex-direction: column;
       }
+
       .prayer-actions {
         width: 100%;
         text-align: right;
@@ -301,6 +328,7 @@
     }
   </style>
 </head>
+
 <body>
 
   <!-- Floating Back Button -->
@@ -316,7 +344,8 @@
     <div id="login-section" class="login-wrapper reveal-on-scroll">
       <img src="assets/logo.png" alt="Jesus Youth AJCE Logo" style="height: 60px; margin-bottom: 20px;">
       <h2 style="margin-bottom: 10px;">Admin Portal</h2>
-      <p style="font-size: 0.9rem; color: #666; margin-bottom: 30px;">Access digital sanctuary administration settings.</p>
+      <p style="font-size: 0.9rem; color: #666; margin-bottom: 30px;">Access digital sanctuary administration settings.
+      </p>
 
       <form id="login-form" onsubmit="handleLoginSubmit(event)">
         <div class="form-group" style="text-align: left;">
@@ -329,11 +358,13 @@
           <input type="password" id="password" class="form-input" required placeholder="Enter password">
         </div>
 
-        <div id="login-error" style="color: #c95c5c; font-weight: 500; font-size: 0.9rem; margin-bottom: 20px; display: none;">
+        <div id="login-error"
+          style="color: #c95c5c; font-weight: 500; font-size: 0.9rem; margin-bottom: 20px; display: none;">
           <i class="fas fa-exclamation-circle"></i> Invalid username or password.
         </div>
 
-        <button type="submit" class="btn-sanctuary btn-primary" style="width: 100%; justify-content: center; padding: 12px;">
+        <button type="submit" class="btn-sanctuary btn-primary"
+          style="width: 100%; justify-content: center; padding: 12px;">
           <i class="fas fa-sign-in-alt"></i> Login
         </button>
       </form>
@@ -344,9 +375,11 @@
       <div class="admin-header">
         <div>
           <h2 style="font-size: 1.8rem; line-height: 1.2;">PrayVault Dashboard</h2>
-          <p style="font-size: 0.9rem; color: var(--charcoal-light); margin: 5px 0 0 0;">Welcome, <span id="admin-user-display" style="font-weight: 600; color: var(--muted-gold);">Admin</span></p>
+          <p style="font-size: 0.9rem; color: var(--charcoal-light); margin: 5px 0 0 0;">Welcome, <span
+              id="admin-user-display" style="font-weight: 600; color: var(--muted-gold);">Admin</span></p>
         </div>
-        <button onclick="handleLogout()" class="btn-sanctuary btn-secondary" style="padding: 8px 18px; font-size: 0.9rem;">
+        <button onclick="handleLogout()" class="btn-sanctuary btn-secondary"
+          style="padding: 8px 18px; font-size: 0.9rem;">
           <i class="fas fa-sign-out-alt"></i> Logout
         </button>
       </div>
@@ -358,7 +391,8 @@
         <button class="admin-nav-btn" id="tab-prayers-btn" onclick="switchTab('prayers')">
           <i class="fas fa-hands-praying"></i> Prayer Requests
         </button>
-        <button class="admin-nav-btn" id="tab-torchbearers-btn" onclick="switchTab('torchbearers')" style="display: none;">
+        <button class="admin-nav-btn" id="tab-torchbearers-btn" onclick="switchTab('torchbearers')"
+          style="display: none;">
           <i class="fas fa-user-group"></i> Meet Torchbearers
         </button>
       </div>
@@ -400,9 +434,11 @@
           <div class="pane-header">
             <div>
               <h3>User Prayer Requests</h3>
-              <p style="font-size: 0.9rem; color: #666; margin: 0;">Intentions submitted by students and staff members.</p>
+              <p style="font-size: 0.9rem; color: #666; margin: 0;">Intentions submitted by students and staff members.
+              </p>
             </div>
-            <button onclick="clearAllPrayers()" class="btn-sanctuary btn-secondary" style="padding: 8px 18px; font-size: 0.9rem;">
+            <button onclick="clearAllPrayers()" class="btn-sanctuary btn-secondary"
+              style="padding: 8px 18px; font-size: 0.9rem;">
               <i class="fas fa-trash-alt"></i> Clear All
             </button>
           </div>
@@ -417,7 +453,8 @@
           <div class="pane-header">
             <div>
               <h3>Core Leadership Details</h3>
-              <p style="font-size: 0.9rem; color: #666; margin: 0;">Update core members listed in the "Meet Torchbearers" page.</p>
+              <p style="font-size: 0.9rem; color: #666; margin: 0;">Update core members listed in the "Meet
+                Torchbearers" page.</p>
             </div>
           </div>
 
@@ -455,16 +492,19 @@
       <div class="modal-body">
         <form id="update-form" onsubmit="handleSaveUpdate(event)">
           <input type="hidden" id="edit-id">
-          
+
           <div class="form-group">
             <label class="form-label" for="form-title">Title / Name</label>
-            <input type="text" id="form-title" class="form-input" required placeholder="e.g. Weekly Fellowship Gathering">
+            <input type="text" id="form-title" class="form-input" required
+              placeholder="e.g. Weekly Fellowship Gathering">
           </div>
 
           <div class="admin-form-grid">
             <div class="form-group">
               <label class="form-label" for="form-category">Category Type</label>
-              <select id="form-category" class="form-input" style="padding: 12px 16px; width: 100%; border: 1px solid var(--border-subtle); background: white; outline: none; border-radius: var(--radius-sm);" required>
+              <select id="form-category" class="form-input"
+                style="padding: 12px 16px; width: 100%; border: 1px solid var(--border-subtle); background: white; outline: none; border-radius: var(--radius-sm);"
+                required>
                 <option value="event">Event (Worship/Intercession)</option>
                 <option value="announcement">Announcement (Updates/Auditions)</option>
                 <option value="news">News (Outreach/Feasts)</option>
@@ -473,14 +513,17 @@
 
             <div class="form-group">
               <label class="form-label" for="form-label-tag">Badge Label</label>
-              <input type="text" id="form-label-tag" class="form-input" required placeholder="e.g. Weekly Gathering, Vigil, Outreach">
+              <input type="text" id="form-label-tag" class="form-input" required
+                placeholder="e.g. Weekly Gathering, Vigil, Outreach">
             </div>
           </div>
 
           <div class="admin-form-grid">
             <div class="form-group">
               <label class="form-label" for="form-icon">FontAwesome Icon Class</label>
-              <select id="form-icon" class="form-input" style="padding: 12px 16px; width: 100%; border: 1px solid var(--border-subtle); background: white; outline: none; border-radius: var(--radius-sm);" required>
+              <select id="form-icon" class="form-input"
+                style="padding: 12px 16px; width: 100%; border: 1px solid var(--border-subtle); background: white; outline: none; border-radius: var(--radius-sm);"
+                required>
                 <option value="fa-hands-praying">Prayer Hands (fa-hands-praying)</option>
                 <option value="fa-cross">Cross (fa-cross)</option>
                 <option value="fa-bullhorn">Bullhorn/Announcement (fa-bullhorn)</option>
@@ -494,7 +537,8 @@
 
             <div class="form-group">
               <label class="form-label" for="form-date">Date Info</label>
-              <input type="text" id="form-date" class="form-input" required placeholder="e.g. Every Wednesday, Aug 12, 2026">
+              <input type="text" id="form-date" class="form-input" required
+                placeholder="e.g. Every Wednesday, Aug 12, 2026">
             </div>
           </div>
 
@@ -506,32 +550,38 @@
 
             <div class="form-group">
               <label class="form-label" for="form-venue">Venue / Location</label>
-              <input type="text" id="form-venue" class="form-input" required placeholder="e.g. College Chapel, JY Square">
+              <input type="text" id="form-venue" class="form-input" required
+                placeholder="e.g. College Chapel, JY Square">
             </div>
           </div>
 
           <div class="form-group">
             <label class="form-label" for="form-desc">Detailed Description</label>
-            <textarea id="form-desc" class="form-textarea" rows="4" required placeholder="Describe the announcement, activities details, or event information..."></textarea>
+            <textarea id="form-desc" class="form-textarea" rows="4" required
+              placeholder="Describe the announcement, activities details, or event information..."></textarea>
           </div>
 
           <div class="admin-form-grid">
             <div class="form-group">
               <label class="form-label" for="form-btn-text">Action Button Text</label>
-              <input type="text" id="form-btn-text" class="form-input" placeholder="e.g. Join Us, View Gallery (Default: Join Us)">
+              <input type="text" id="form-btn-text" class="form-input"
+                placeholder="e.g. Join Us, View Gallery (Default: Join Us)">
             </div>
 
             <div class="form-group">
               <label class="form-label" for="form-btn-link">Action Button Link</label>
-              <input type="text" id="form-btn-link" class="form-input" placeholder="e.g. contact.html, gallery.html (Default: contact.html)">
+              <input type="text" id="form-btn-link" class="form-input"
+                placeholder="e.g. request.html, gallery.html (Default: request.html)">
             </div>
           </div>
 
           <div style="display: flex; gap: 15px; margin-top: 10px;">
-            <button type="submit" class="btn-sanctuary btn-primary" style="flex: 1; justify-content: center; border: none; cursor: pointer; padding: 12px 20px;">
+            <button type="submit" class="btn-sanctuary btn-primary"
+              style="flex: 1; justify-content: center; border: none; cursor: pointer; padding: 12px 20px;">
               <i class="fas fa-save"></i> Save Updates
             </button>
-            <button type="button" onclick="closeModal()" class="btn-sanctuary btn-secondary" style="flex: 1; justify-content: center; padding: 12px 20px;">
+            <button type="button" onclick="closeModal()" class="btn-sanctuary btn-secondary"
+              style="flex: 1; justify-content: center; padding: 12px 20px;">
               Cancel
             </button>
           </div>
@@ -551,16 +601,25 @@
 
       <ul class="footer-links">
         <li><a href="index.html">Home</a></li>
-        <li><a href="about.html">About</a></li>
         <li><a href="verse.html">Daily Verse</a></li>
-        <li><a href="audio.html">Audio Devotionals</a></li>
-        <li><a href="saint.html">Saint of the Day</a></li>
-        <li><a href="gallery.html">Gallery</a></li>
+        <li><a href="kindle.html">Prayer Kindle</a></li>
+        <li><a href="saint.html">Daily Saint</a></li>
         <li><a href="digisquare.html">JY DigiSquare</a></li>
         <li><a href="torchbearers.html">Meet Torchbearers</a></li>
         <li><a href="admin.html">Admin</a></li>
-        <li><a href="contact.html">Contact</a></li>
       </ul>
+
+      <div class="footer-socials">
+        <a href="https://instagram.com" target="_blank" rel="noopener" class="social-icon-btn" aria-label="Instagram">
+          <i class="fab fa-instagram"></i>
+        </a>
+        <a href="https://youtube.com" target="_blank" rel="noopener" class="social-icon-btn" aria-label="YouTube">
+          <i class="fab fa-youtube"></i>
+        </a>
+        <a href="mailto:jy@ajce.in" class="social-icon-btn" aria-label="Email">
+          <i class="fas fa-envelope"></i>
+        </a>
+      </div>
 
       <div class="footer-copy">
         &copy; <span id="year">2026</span> Jesus Youth Amal Jyothi College of Engineering. All rights reserved.
@@ -578,7 +637,7 @@
       <div class="modal-body">
         <form id="leader-form" onsubmit="handleSaveLeader(event)">
           <input type="hidden" id="edit-leader-id">
-          
+
           <div class="admin-form-grid">
             <div class="form-group">
               <label class="form-label" for="leader-form-name">Name</label>
@@ -605,7 +664,8 @@
 
           <div class="form-group">
             <label class="form-label" for="leader-form-quote">Quote / Motto</label>
-            <textarea id="leader-form-quote" class="form-textarea" rows="3" required placeholder="e.g. Called to lead, chosen to serve..."></textarea>
+            <textarea id="leader-form-quote" class="form-textarea" rows="3" required
+              placeholder="e.g. Called to lead, chosen to serve..."></textarea>
           </div>
 
           <div class="admin-form-grid">
@@ -616,20 +676,24 @@
 
             <div class="form-group">
               <label class="form-label" for="leader-form-instagram">Instagram Link</label>
-              <input type="text" id="leader-form-instagram" class="form-input" placeholder="e.g. # or Instagram profile URL">
+              <input type="text" id="leader-form-instagram" class="form-input"
+                placeholder="e.g. # or Instagram profile URL">
             </div>
           </div>
 
           <div class="form-group">
             <label class="form-label" for="leader-form-linkedin">LinkedIn Link</label>
-            <input type="text" id="leader-form-linkedin" class="form-input" placeholder="e.g. # or LinkedIn profile URL">
+            <input type="text" id="leader-form-linkedin" class="form-input"
+              placeholder="e.g. # or LinkedIn profile URL">
           </div>
 
           <div style="display: flex; gap: 15px; margin-top: 20px;">
-            <button type="submit" class="btn-sanctuary btn-primary" style="flex: 1; justify-content: center; border: none; cursor: pointer; padding: 12px 20px;">
+            <button type="submit" class="btn-sanctuary btn-primary"
+              style="flex: 1; justify-content: center; border: none; cursor: pointer; padding: 12px 20px;">
               <i class="fas fa-save"></i> Save Member Details
             </button>
-            <button type="button" onclick="closeLeaderModal()" class="btn-sanctuary btn-secondary" style="flex: 1; justify-content: center; padding: 12px 20px;">
+            <button type="button" onclick="closeLeaderModal()" class="btn-sanctuary btn-secondary"
+              style="flex: 1; justify-content: center; padding: 12px 20px;">
               Cancel
             </button>
           </div>
@@ -687,12 +751,12 @@
     function showDashboard() {
       document.getElementById('login-section').style.display = 'none';
       document.getElementById('dashboard-section').style.display = 'block';
-      
+
       const username = sessionStorage.getItem('admin_username') || 'Admin';
       const role = sessionStorage.getItem('admin_role') || 'Staff Admin';
-      
+
       document.getElementById('admin-user-display').textContent = `${username} (${role})`;
-      
+
       // Control tab visibility based on role
       const tabTorchbearersBtn = document.getElementById('tab-torchbearers-btn');
       if (role === 'Unit Coordinator' || role === 'Assistant Coordinator') {
@@ -703,7 +767,7 @@
           switchTab('updates');
         }
       }
-      
+
       // Load tables/lists
       renderUpdatesList();
       renderPrayersList();
@@ -748,9 +812,7 @@
           date: "Every Wednesday",
           time: "4:45 PM",
           venue: "JY Square",
-          description: "Join us for a peaceful, spirit-filled hour of praise, worship, personal testimonies, and intercessory prayers. All students and staff are welcome!",
-          actionText: "Join Us",
-          actionLink: "contact.html"
+          description: "Join us for a peaceful, spirit-filled hour of praise, worship, personal testimonies, and intercessory prayers. All students and staff are welcome!"
         },
         {
           id: 2,
@@ -761,9 +823,7 @@
           date: "Every Tuesday",
           time: "4:45 PM",
           venue: "College Chapel",
-          description: "Let's come together in a special hour of prayer to uplift our college, our community, and each other. It's a time to experience God’s presence, share burdens, and grow together in faith.",
-          actionText: "Join Us",
-          actionLink: "contact.html"
+          description: "Let's come together in a special hour of prayer to uplift our college, our community, and each other. It's a time to experience God’s presence, share burdens, and grow together in faith."
         },
         {
           id: 3,
@@ -774,13 +834,11 @@
           date: "Every Thursday",
           time: "4:45 PM",
           venue: "College Chapel",
-          description: "Join us in a sacred moment of prayer, seeking God’s grace and protection for the unborn, for families, and for a culture of life in our community.",
-          actionText: "Join Us",
-          actionLink: "contact.html"
+          description: "Join us in a sacred moment of prayer, seeking God’s grace and protection for the unborn, for families, and for a culture of life in our community."
         },
         {
           id: 4,
-          category: "event",
+          category: "announcement",
           categoryLabel: "Pilgrimage",
           icon: "fa-cross",
           title: "Bharananganam Pilgrimage'26",
@@ -795,6 +853,38 @@
 
       if (!localStorage.getItem('jy_updates')) {
         localStorage.setItem('jy_updates', JSON.stringify(defaultUpdates));
+      } else {
+        // Sync local storage in case default updates were modified in source code (e.g. category, title, text, removing buttons)
+        let currentUpdates = JSON.parse(localStorage.getItem('jy_updates') || '[]');
+        let modified = false;
+        
+        currentUpdates = currentUpdates.map(item => {
+          const defaultItem = defaultUpdates.find(d => d.id === item.id);
+          if (defaultItem) {
+            // Sync category if it differs
+            if (item.category !== defaultItem.category) {
+              item.category = defaultItem.category;
+              modified = true;
+            }
+            // Sync text details
+            if (item.categoryLabel !== defaultItem.categoryLabel) { item.categoryLabel = defaultItem.categoryLabel; modified = true; }
+            if (item.icon !== defaultItem.icon) { item.icon = defaultItem.icon; modified = true; }
+            if (item.title !== defaultItem.title) { item.title = defaultItem.title; modified = true; }
+            if (item.description !== defaultItem.description) { item.description = defaultItem.description; modified = true; }
+            if (item.date !== defaultItem.date) { item.date = defaultItem.date; modified = true; }
+            if (item.time !== defaultItem.time) { item.time = defaultItem.time; modified = true; }
+            if (item.venue !== defaultItem.venue) { item.venue = defaultItem.venue; modified = true; }
+
+            // Sync button removal
+            if (!defaultItem.actionText && item.actionText) { delete item.actionText; modified = true; }
+            if (!defaultItem.actionLink && item.actionLink) { delete item.actionLink; modified = true; }
+          }
+          return item;
+        });
+        
+        if (modified) {
+          localStorage.setItem('jy_updates', JSON.stringify(currentUpdates));
+        }
       }
       return JSON.parse(localStorage.getItem('jy_updates'));
     }
@@ -870,7 +960,7 @@
       const venue = document.getElementById('form-venue').value.trim();
       const description = document.getElementById('form-desc').value.trim();
       const actionText = document.getElementById('form-btn-text').value.trim() || 'Join Us';
-      const actionLink = document.getElementById('form-btn-link').value.trim() || 'contact.html';
+      const actionLink = document.getElementById('form-btn-link').value.trim() || 'request.html';
 
       let items = getUpdatesData();
 
@@ -1120,11 +1210,12 @@
     function escapeHtml(str) {
       if (!str) return '';
       return str.replace(/&/g, "&amp;")
-                .replace(/</g, "&lt;")
-                .replace(/>/g, "&gt;")
-                .replace(/"/g, "&quot;")
-                .replace(/'/g, "&#039;");
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
     }
   </script>
 </body>
+
 </html>

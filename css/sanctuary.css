@@ -1165,11 +1165,16 @@ a {
     grid-template-columns: 1fr;
   }
   .logo-top-left-container {
-    top: 20px;
-    left: 20px;
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    z-index: 1000;
   }
   .logo-top-left {
-    height: 55px;
+    height: 42px;
+  }
+  .hero-section {
+    padding-top: 100px;
   }
   .back-home-container {
     position: relative;

@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Daily Bible Verse | Jesus Youth AJCE</title>
   <meta name="description" content="Receive today's sacred scripture verse and reflection from Jesus Youth AJCE. Auto-updated daily.">
-  <link rel="icon" type="image/png" href="assets/logo.png">
+  <link rel="icon" type="image/png" href="assets/meta_icon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
@@ -54,22 +54,31 @@
   <footer class="sanctuary-footer">
     <div class="footer-content">
       <p class="footer-quote">
-        "Your word is a lamp to my feet and a light to my path."
-        <br><span style="font-size: 0.95rem; color: var(--muted-gold); font-style: normal;">— Psalm 119:105</span>
+        "I am the light of the world. Whoever follows me will never walk in darkness, but will have the light of life."
+        <br><span style="font-size: 0.95rem; color: var(--muted-gold); font-style: normal;">— John 8:12</span>
       </p>
 
       <ul class="footer-links">
         <li><a href="index.html">Home</a></li>
-        <li><a href="about.html">About</a></li>
         <li><a href="verse.html">Daily Verse</a></li>
-        <li><a href="audio.html">Audio Devotionals</a></li>
-        <li><a href="saint.html">Saint of the Day</a></li>
-        <li><a href="gallery.html">Gallery</a></li>
+        <li><a href="kindle.html">Prayer Kindle</a></li>
+        <li><a href="saint.html">Daily Saint</a></li>
         <li><a href="digisquare.html">JY DigiSquare</a></li>
         <li><a href="torchbearers.html">Meet Torchbearers</a></li>
         <li><a href="admin.html">Admin</a></li>
-        <li><a href="contact.html">Contact</a></li>
       </ul>
+
+      <div class="footer-socials">
+        <a href="https://instagram.com" target="_blank" rel="noopener" class="social-icon-btn" aria-label="Instagram">
+          <i class="fab fa-instagram"></i>
+        </a>
+        <a href="https://youtube.com" target="_blank" rel="noopener" class="social-icon-btn" aria-label="YouTube">
+          <i class="fab fa-youtube"></i>
+        </a>
+        <a href="mailto:jy@ajce.in" class="social-icon-btn" aria-label="Email">
+          <i class="fas fa-envelope"></i>
+        </a>
+      </div>
 
       <div class="footer-copy">
         &copy; <span id="year">2026</span> Jesus Youth Amal Jyothi College of Engineering. All rights reserved.
@@ -96,7 +105,7 @@
       const labelEl = document.getElementById('verse-tag-label');
       
       if (order === 'random') {
-        labelEl.innerHTML = '<i class="fas fa-shuffle"></i> Random Word';
+        labelEl.innerHTML = '<i class="fas fa-shuffle"></i> Random Word of God';
       } else {
         labelEl.innerHTML = '<i class="fas fa-book-bible"></i> Today\'s Word';
       }
