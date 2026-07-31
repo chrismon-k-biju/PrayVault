@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact & Prayer Requests | Jesus Youth AJCE</title>
+  <meta name="description"
+    content="Reach out to Jesus Youth AJCE. Send prayer intentions, connect with our campus ministry team, or visit our chapel.">
+  <link rel="icon" type="image/png" href="assets/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400;1,600&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/sanctuary.css">
+</head>
+
+<body>
+
+  <!-- Simple Floating Back Button -->
+  <div class="back-home-container">
+    <a href="index.html" class="back-home-link">
+      <i class="fas fa-arrow-left"></i> Back to Sanctuary
+    </a>
+  </div>
+
+  <!-- Header Banner -->
+  <section style="background: var(--soft-cream); padding: 140px 24px 60px 24px; text-align: center;">
+    <span class="section-tag">Connect With Us</span>
+    <h1 style="margin-top: 10px;">We Are Here For You</h1>
+    <p class="section-subtitle">Reach out for prayer intentions</p>
+  </section>
+
+  <!-- Contact Form -->
+  <section class="section-wrapper">
+    <div class="contact-form reveal-on-scroll" style="max-width: 600px; margin: 0 auto;">
+      <h3 style="margin-bottom: 10px;">Send a Prayer Request</h3>
+      <p style="font-size: 0.92rem; margin-bottom: 24px;">
+        Your prayer requests are held in confidence and remembered during our weekly adoration.
+      </p>
+
+      <form onsubmit="handleFormSubmit(event)">
+        <div class="form-group">
+          <label class="form-label" for="contact-feeling">How are you feeling today</label>
+          <input type="text" id="contact-feeling" class="form-input" placeholder="Anxious, Fear etc" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="contact-message">Prayer Request</label>
+          <textarea id="contact-message" class="form-textarea" rows="5"
+            placeholder="Share your intentions or how we can support you..." required></textarea>
+        </div>
+
+        <button type="submit" class="btn-sanctuary btn-primary" style="width: 100%; justify-content: center;">
+          <i class="fas fa-paper-plane"></i> Send Intentions
+        </button>
+      </form>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="sanctuary-footer">
+    <div class="footer-content">
+      <p class="footer-quote">
+        "Ask and it will be given to you; seek and you will find; knock and the door will be opened to you."
+        <br><span style="font-size: 0.95rem; color: var(--muted-gold); font-style: normal;">— Matthew 7:7</span>
+      </p>
+      <div class="footer-copy">
+        &copy; <span id="year">2026</span> Jesus Youth Amal Jyothi College of Engineering. All rights reserved.
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    function handleFormSubmit(event) {
+      event.preventDefault();
+      alert('Thank you for sharing your prayer request. Your intentions will be remembered in our weekly prayer meeting.');
+      event.target.reset();
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('is-visible');
+      });
+    }, { threshold: 0.15 });
+    document.querySelectorAll('.reveal-on-scroll').forEach(el => observer.observe(el));
+  </script>
+</body>
+
+</html>

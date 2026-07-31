@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Daily Bible Verse | Jesus Youth AJCE</title>
+  <meta name="description" content="Receive today's sacred scripture verse and reflection from Jesus Youth AJCE. Auto-updated daily.">
+  <link rel="icon" type="image/png" href="assets/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/sanctuary.css">
+</head>
+<body>
+
+  <!-- Simple Floating Back Button -->
+  <div class="back-home-container">
+    <a href="index.html" class="back-home-link">
+      <i class="fas fa-arrow-left"></i> Back to Sanctuary
+    </a>
+  </div>
+
+  <!-- Header Banner -->
+  <section style="background: var(--soft-cream); padding: 140px 24px 60px 24px; text-align: center;">
+    <span class="section-tag">Scripture</span>
+    <h1 style="margin-top: 10px;">Daily Bible Verse</h1>
+    <p class="section-subtitle">God's living word to guide, encourage, and strengthen your spirit today.</p>
+  </section>
+
+  <!-- Sacred Card -->
+  <section class="section-wrapper" style="padding-top: 60px;">
+    <div class="verse-card reveal-on-scroll">
+      <span class="verse-tag" id="verse-tag-label"><i class="fas fa-book-bible"></i> Today's Word</span>
+      <blockquote class="verse-text" id="daily-verse-text">
+        Loading scripture...
+      </blockquote>
+      <div class="verse-ref" id="daily-verse-ref">— ...</div>
+
+      <div class="divider-cross" style="margin-bottom: 25px;">
+        <i class="fas fa-cross"></i>
+      </div>
+
+      <!-- Option to Generate Random Verse -->
+      <div style="text-align: center; margin-top: 10px;">
+        <button id="random-verse-btn" class="btn-sanctuary btn-secondary" style="padding: 10px 24px; font-size: 0.9rem;">
+          <i class="fas fa-shuffle"></i> Get Random Verse
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="sanctuary-footer">
+    <div class="footer-content">
+      <p class="footer-quote">
+        "Your word is a lamp to my feet and a light to my path."
+        <br><span style="font-size: 0.95rem; color: var(--muted-gold); font-style: normal;">— Psalm 119:105</span>
+      </p>
+
+      <ul class="footer-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="verse.html">Daily Verse</a></li>
+        <li><a href="audio.html">Audio Devotionals</a></li>
+        <li><a href="saint.html">Saint of the Day</a></li>
+        <li><a href="gallery.html">Gallery</a></li>
+        <li><a href="digisquare.html">JY DigiSquare</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+
+      <div class="footer-copy">
+        &copy; <span id="year">2026</span> Jesus Youth Amal Jyothi College of Engineering. All rights reserved.
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    const fallbackVerses = [
+      { text: "Trust in the Lord with all your heart, and do not lean on your own understanding. In all your ways acknowledge Him, and He will make straight your paths.", ref: "Proverbs 3:5-6" },
+      { text: "The Lord is my shepherd; I shall not want. He makes me lie down in green pastures; He leads me beside still waters.", ref: "Psalm 23:1-2" },
+      { text: "Come to me, all who labor and are heavy laden, and I will give you rest. Take my yoke upon you, and learn from me, for I am gentle and lowly in heart.", ref: "Matthew 11:28-29" },
+      { text: "For I know the plans I have for you, declares the Lord, plans for welfare and not for evil, to give you a future and a hope.", ref: "Jeremiah 29:11" },
+      { text: "Do not be anxious about anything, but in everything by prayer and supplication with thanksgiving let your requests be made known to God.", ref: "Philippians 4:6" },
+      { text: "I can do all things through Him who strengthens me.", ref: "Philippians 4:13" },
+      { text: "The light shines in the darkness, and the darkness has not overcome it.", ref: "John 1:5" }
+    ];
+
+    async function loadVerse(order = 'daily') {
+      const textEl = document.getElementById('daily-verse-text');
+      const refEl = document.getElementById('daily-verse-ref');
+      const labelEl = document.getElementById('verse-tag-label');
+      
+      if (order === 'random') {
+        labelEl.innerHTML = '<i class="fas fa-shuffle"></i> Random Word';
+      } else {
+        labelEl.innerHTML = '<i class="fas fa-book-bible"></i> Today\'s Word';
+      }
+
+      textEl.textContent = "Loading scripture...";
+      refEl.textContent = "— ...";
+
+      try {
+        const response = await fetch(`https://beta.ourmanna.com/api/v1/get?format=json&order=${order}`, {
+          headers: {
+            'Accept': 'application/json'
+          }
+        });
+        
+        if (!response.ok) throw new Error("Network response was not ok");
+        
+        const data = await response.json();
+        const { text, reference, version } = data.verse.details;
+
+        textEl.textContent = `"${text.trim()}"`;
+        refEl.textContent = `— ${reference} (${version})`;
+      } catch (error) {
+        console.error("Failed to fetch verse, using fallback:", error);
+        
+        // Pick a fallback verse
+        let verse;
+        if (order === 'random') {
+          verse = fallbackVerses[Math.floor(Math.random() * fallbackVerses.length)];
+        } else {
+          const now = new Date();
+          const start = new Date(now.getFullYear(), 0, 0);
+          const diff = now - start;
+          const dayOfYear = Math.floor(diff / (1000 * 60 * 60 * 24));
+          verse = fallbackVerses[dayOfYear % fallbackVerses.length];
+        }
+        
+        textEl.textContent = `"${verse.text}"`;
+        refEl.textContent = `— ${verse.ref}`;
+      }
+    }
+
+    // Check if url query parameter asks for random
+    const urlParams = new URLSearchParams(window.location.search);
+    const initialOrder = urlParams.get('type') === 'random' ? 'random' : 'daily';
+    
+    // Load initial verse
+    loadVerse(initialOrder);
+
+    // Bind event for random verse button
+    document.getElementById('random-verse-btn').addEventListener('click', () => {
+      loadVerse('random');
+    });
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('is-visible');
+      });
+    }, { threshold: 0.15 });
+    document.querySelectorAll('.reveal-on-scroll').forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>

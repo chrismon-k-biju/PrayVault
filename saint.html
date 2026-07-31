@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Saint of the Day | Jesus Youth AJCE</title>
+  <meta name="description"
+    content="Meet today's saint, read their biography, inspiring quote, reflection, and devotional prayer.">
+  <link rel="icon" type="image/png" href="assets/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400;1,600&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/sanctuary.css">
+</head>
+
+<body>
+
+  <!-- Simple Floating Back Button -->
+  <div class="back-home-container">
+    <a href="index.html" class="back-home-link">
+      <i class="fas fa-arrow-left"></i> Back to Sanctuary
+    </a>
+  </div>
+
+  <!-- Header Banner -->
+  <section style="background: var(--soft-cream); padding: 140px 24px 60px 24px; text-align: center;">
+    <span class="section-tag">Daily Companion</span>
+    <h1 style="margin-top: 10px;">Saint of the Day</h1>
+    <p class="section-subtitle">Inspiration and intercession from those who walked before us in holy faith.</p>
+  </section>
+
+  <!-- Saint Card -->
+  <section class="section-wrapper">
+    <div class="saint-card-wrapper reveal-on-scroll">
+      <div class="saint-portrait-col">
+        <img class="saint-avatar" id="saint-img" src="assets/logo.png" alt="Saint Portrait" style="display: none;">
+        <h3 class="saint-name" id="saint-name">St. Alphonsa</h3>
+        <div class="saint-feast" id="saint-feast">Feast Day: July 28</div>
+      </div>
+
+      <div class="saint-details-col">
+        <span class="saint-section-label">Biography</span>
+        <p id="saint-bio" style="font-size: 0.98rem; margin-bottom: 16px;">
+          St. Alphonsa was an Indian Catholic Franciscan Clarist nun who lived a life of quiet suffering and profound
+          joy in God. She became the first woman of Indian origin to be canonized as a saint.
+        </p>
+
+        <div class="saint-quote-box" id="saint-quote">
+          "I consider suffering a great gift from the Lord. I desire to love Him with all my heart and surrender
+          completely."
+        </div>
+
+        <span class="saint-section-label" style="margin-top: 10px;">Devotional Prayer</span>
+        <p id="saint-prayer" style="font-size: 0.92rem; font-style: italic; color: #666; margin-bottom: 0;">
+          O Lord, grant us the patience and joy of St. Alphonsa, that in every trial we may entrust ourselves entirely
+          to Your divine will. Amen.
+        </p>
+
+        <!-- Extra details (Patronage and Wiki Link) -->
+        <div id="saint-extra" style="margin-top: 20px; font-size: 0.92rem; display: flex; flex-direction: column; gap: 8px; border-top: 1px dashed rgba(35, 83, 71, 0.3); padding-top: 15px;">
+          <span id="saint-patronage" style="display: none; color: var(--muted-gold); font-weight: 600;">
+            <i class="fas fa-hands-helping" style="margin-right: 4px;"></i> Patronage: <span id="saint-patronage-text" style="color: var(--text-color); font-weight: normal;"></span>
+          </span>
+          <span id="saint-wiki" style="display: none;">
+            <a id="saint-wiki-link" href="#" target="_blank" style="color: var(--muted-gold); text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 6px;">
+              <i class="fab fa-wikipedia-w"></i> Read more on Wikipedia
+            </a>
+          </span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="sanctuary-footer">
+    <div class="footer-content">
+      <p class="footer-quote">
+        "Therefore, since we are surrounded by so great a cloud of witnesses, let us run with perseverance the race
+        marked out for us."
+        <br><span style="font-size: 0.95rem; color: var(--muted-gold); font-style: normal;">— Hebrews 12:1</span>
+      </p>
+
+      <ul class="footer-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="verse.html">Daily Verse</a></li>
+        <li><a href="audio.html">Audio Devotionals</a></li>
+        <li><a href="saint.html">Saint of the Day</a></li>
+        <li><a href="gallery.html">Gallery</a></li>
+        <li><a href="digisquare.html">JY DigiSquare</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+
+      <div class="footer-copy">
+        &copy; <span id="year">2026</span> Jesus Youth Amal Jyothi College of Engineering. All rights reserved.
+      </div>
+    </div>
+  </footer>
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    const saintsRegistry = [
+      {
+        name: "Sts. Martha, Mary, and Lazarus",
+        feast: "Memorial — July 29",
+        month: 6, // 0-indexed: July is 6
+        day: 29,
+        bio: "Friends of Jesus who welcomed Him into their home in Bethany. Martha served with diligence, Mary listened at His feet, and Lazarus was raised from the dead, witnessing to the resurrection.",
+        quote: "Lord, if you had been here, my brother would not have died. But even now I know that whatever you ask of God, God will give you.",
+        prayer: "O God, whose Son called Lazarus from the tomb and was welcomed in the home of Martha and Mary, grant that we may serve Him in our brothers and sisters. Amen.",
+        wikipedia: "https://en.wikipedia.org/wiki/Martha"
+      },
+      {
+        name: "St. Alphonsa",
+        feast: "Feast Day: July 28",
+        month: 6,
+        day: 28,
+        bio: "St. Alphonsa was an Indian Catholic Franciscan Clarist nun who lived a life of quiet suffering and profound joy in God. She became the first woman of Indian origin to be canonized as a saint.",
+        quote: "I consider suffering a great gift from the Lord. I desire to love Him with all my heart and surrender completely.",
+        prayer: "O Lord, grant us the patience and joy of St. Alphonsa, that in every trial we may entrust ourselves entirely to Your daily will. Amen.",
+        wikipedia: "https://en.wikipedia.org/wiki/Alphonsa_of_the_Immaculate_Conception"
+      },
+      {
+        name: "St. Francis of Assisi",
+        feast: "Feast Day: October 4",
+        month: 9, // October is 9
+        day: 4,
+        bio: "Founder of the Franciscan Order, St. Francis abandoned wealth to embrace radical humility, poverty, and love for God's creation, spreading peace wherever he went.",
+        quote: "Lord, make me an instrument of your peace. Where there is hatred, let me sow love.",
+        prayer: "Lord God, teach us to love simplicity and to behold Your presence in all creation, following the footsteps of St. Francis. Amen.",
+        wikipedia: "https://en.wikipedia.org/wiki/Francis_of_Assisi"
+      },
+      {
+        name: "St. Teresa of Calcutta",
+        feast: "Feast Day: September 5",
+        month: 8, // September is 8
+        day: 5,
+        bio: "Mother Teresa dedicated her life to serving the poorest of the poor on the streets of Kolkata, witnessing Christ's thirst for love in every human soul.",
+        quote: "Not all of us can do great things. But we can do small things with great love.",
+        prayer: "Holy Spirit, fill our hearts with Mother Teresa's compassion so we may serve our neighbors with unconditional love. Amen.",
+        wikipedia: "https://en.wikipedia.org/wiki/Mother_Teresa"
+      }
+    ];
+
+    async function fetchWikiDetails(saintName, nameEl, feastEl, bioEl, wikiEl, wikiLinkEl, imgEl, fallbackBio) {
+      let cleanName = saintName;
+      try {
+        const response = await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(cleanName)}`);
+        if (response.ok) {
+          const wikiData = await response.json();
+          
+          if (wikiData.extract) {
+            bioEl.textContent = wikiData.extract;
+          } else {
+            bioEl.textContent = fallbackBio;
+          }
+
+          if (wikiData.description) {
+            feastEl.textContent += ` · ${wikiData.description}`;
+          }
+
+          if (wikiData.content_urls && wikiData.content_urls.desktop) {
+            wikiLinkEl.href = wikiData.content_urls.desktop.page;
+            wikiEl.style.display = 'block';
+          }
+
+          if (wikiData.thumbnail && wikiData.thumbnail.source) {
+            imgEl.src = wikiData.thumbnail.source;
+            imgEl.style.display = 'block';
+          }
+        } else {
+          // If 404, try querying without "Saint " or "St. " prefix
+          let altName = cleanName.replace(/^(Saint|St\.)\s+/i, "");
+          if (altName !== cleanName) {
+            const retryResponse = await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(altName)}`);
+            if (retryResponse.ok) {
+              const retryData = await retryResponse.json();
+              if (retryData.extract) bioEl.textContent = retryData.extract;
+              if (retryData.description) feastEl.textContent += ` · ${retryData.description}`;
+              if (retryData.content_urls && retryData.content_urls.desktop) {
+                wikiLinkEl.href = retryData.content_urls.desktop.page;
+                wikiEl.style.display = 'block';
+              }
+              if (retryData.thumbnail && retryData.thumbnail.source) {
+                imgEl.src = retryData.thumbnail.source;
+                imgEl.style.display = 'block';
+              }
+              return;
+            }
+          }
+          bioEl.textContent = fallbackBio;
+        }
+      } catch (err) {
+        console.warn("Failed to fetch Wikipedia summary for " + saintName, err);
+        bioEl.textContent = fallbackBio;
+      }
+    }
+
+    async function loadSaint() {
+      const nameEl = document.getElementById('saint-name');
+      const feastEl = document.getElementById('saint-feast');
+      const bioEl = document.getElementById('saint-bio');
+      const quoteEl = document.getElementById('saint-quote');
+      const prayerEl = document.getElementById('saint-prayer');
+      const patronageEl = document.getElementById('saint-patronage');
+      const patronageTextEl = document.getElementById('saint-patronage-text');
+      const wikiEl = document.getElementById('saint-wiki');
+      const wikiLinkEl = document.getElementById('saint-wiki-link');
+      const imgEl = document.getElementById('saint-img');
+
+      // Reset extra elements
+      patronageEl.style.display = 'none';
+      wikiEl.style.display = 'none';
+      imgEl.style.display = 'none';
+
+      const today = new Date();
+      const currentMonth = today.getMonth(); // 0-11
+      const currentDate = today.getDate(); // 1-31
+      
+      // Check if we have an exact match in the local registry for today's month and day
+      let localMatch = saintsRegistry.find(s => s.month === currentMonth && s.day === currentDate);
+
+      if (localMatch) {
+        // Prioritize local registry details (useful for local/Indian feast days)
+        nameEl.textContent = localMatch.name;
+        feastEl.textContent = localMatch.feast;
+        bioEl.textContent = localMatch.bio;
+        quoteEl.textContent = `"${localMatch.quote}"`;
+        prayerEl.textContent = localMatch.prayer;
+        
+        if (localMatch.wikipedia) {
+          wikiLinkEl.href = localMatch.wikipedia;
+          wikiEl.style.display = 'block';
+        }
+        
+        // Asynchronously fetch Wikipedia thumbnail / description
+        await fetchWikiDetails(localMatch.name, nameEl, feastEl, bioEl, wikiEl, wikiLinkEl, imgEl, localMatch.bio);
+        return;
+      }
+
+      try {
+        // Fetch from the Collection of Catholic Prayers API v1/saints
+        const response = await fetch('https://the-collection-of-catholic-prayers-api.vercel.app/v1/saints');
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        const data = await response.json();
+
+        const saintsList = data || [];
+        const monthNum = currentMonth + 1; // 1-12
+        
+        // Find saint for today
+        const todaySaint = saintsList.find(s => 
+          parseInt(s.month_num, 10) === monthNum && 
+          parseInt(s.saint_day, 10) === currentDate
+        );
+
+        if (!todaySaint) {
+          throw new Error("No saint found in API list for today's date");
+        }
+
+        const title = todaySaint.saint_name;
+        nameEl.textContent = title;
+        feastEl.textContent = `Feast Day: ${todaySaint.month_name} ${todaySaint.saint_day}`;
+        
+        // Try to match the title against our local registry anyway
+        const normalizedTitle = title.toLowerCase();
+        let matchedSaint = saintsRegistry.find(s =>
+          normalizedTitle.includes(s.name.toLowerCase()) ||
+          s.name.toLowerCase().split(' ').some(word => word.length > 2 && normalizedTitle.includes(word))
+        );
+
+        if (matchedSaint) {
+          nameEl.textContent = matchedSaint.name;
+          feastEl.textContent = `Feast Day: ${todaySaint.month_name} ${todaySaint.saint_day} · ${matchedSaint.feast}`;
+          bioEl.textContent = matchedSaint.bio;
+          quoteEl.textContent = `"${matchedSaint.quote}"`;
+          prayerEl.textContent = matchedSaint.prayer;
+          
+          if (matchedSaint.wikipedia) {
+            wikiLinkEl.href = matchedSaint.wikipedia;
+            wikiEl.style.display = 'block';
+          }
+          
+          await fetchWikiDetails(matchedSaint.name, nameEl, feastEl, bioEl, wikiEl, wikiLinkEl, imgEl, matchedSaint.bio);
+        } else {
+          // Generate generic fallback biography in case Wikipedia fails
+          const fallbackBio = `Today we celebrate the liturgical feast of ${title}. We reflect on their inspiring life of service, devotion, and union with God.`;
+          
+          // Generate customized prayer and quote
+          quoteEl.textContent = `"Walk in the light of the Lord, following the steps of His saints."`;
+          prayerEl.textContent = `O Lord, we thank You for the witness of Your saints. Through the intercession of ${title}, guide us to walk in holiness and serve our community with love. Amen.`;
+          
+          // Fetch rich biography and image from Wikipedia REST API
+          await fetchWikiDetails(title, nameEl, feastEl, bioEl, wikiEl, wikiLinkEl, imgEl, fallbackBio);
+        }
+      } catch (error) {
+        console.warn("Failed to fetch Saint from API, using fallback calendar:", error);
+
+        // Fall back to a cycle of our local registry
+        const fallbackSaint = saintsRegistry[currentDate % saintsRegistry.length];
+
+        nameEl.textContent = fallbackSaint.name;
+        feastEl.textContent = fallbackSaint.feast;
+        bioEl.textContent = fallbackSaint.bio;
+        quoteEl.textContent = `"${fallbackSaint.quote}"`;
+        prayerEl.textContent = fallbackSaint.prayer;
+        
+        if (fallbackSaint.wikipedia) {
+          wikiLinkEl.href = fallbackSaint.wikipedia;
+          wikiEl.style.display = 'block';
+        }
+        
+        await fetchWikiDetails(fallbackSaint.name, nameEl, feastEl, bioEl, wikiEl, wikiLinkEl, imgEl, fallbackSaint.bio);
+      }
+    }
+
+    loadSaint();
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('is-visible');
+      });
+    }, { threshold: 0.15 });
+    document.querySelectorAll('.reveal-on-scroll').forEach(el => observer.observe(el));
+  </script>
+</body>
+
+</html>

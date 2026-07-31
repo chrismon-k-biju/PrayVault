@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gallery | Jesus Youth AJCE</title>
+  <meta name="description" content="View our community photo gallery capturing moments of grace, worship, and fellowship.">
+  <link rel="icon" type="image/png" href="assets/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/sanctuary.css">
+</head>
+<body>
+
+  <!-- Simple Floating Back Button -->
+  <div class="back-home-container">
+    <a href="index.html" class="back-home-link">
+      <i class="fas fa-arrow-left"></i> Back to Sanctuary
+    </a>
+  </div>
+
+  <!-- Header Banner -->
+  <section style="background: var(--soft-cream); padding: 140px 24px 60px 24px; text-align: center;">
+    <span class="section-tag">Moments of Grace</span>
+    <h1 style="margin-top: 10px;">Community Gallery</h1>
+    <p class="section-subtitle">Glimpses of fellowship, Eucharistic worship, and student life at AJCE.</p>
+  </section>
+
+  <!-- Gallery Grid -->
+  <section class="section-wrapper">
+    <div class="gallery-grid reveal-on-scroll">
+      <div class="gallery-item" onclick="openLightbox('assets/hero_adoration.jpg')">
+        <img src="assets/hero_adoration.jpg" alt="Eucharistic Adoration">
+        <div class="gallery-overlay"><i class="fas fa-magnifying-glass-plus"></i></div>
+      </div>
+
+      <div class="gallery-item" onclick="openLightbox('assets/ajce_chapel.jpg')">
+        <img src="assets/ajce_chapel.jpg" alt="AJCE Chapel Sanctuary">
+        <div class="gallery-overlay"><i class="fas fa-magnifying-glass-plus"></i></div>
+      </div>
+
+      <div class="gallery-item" onclick="openLightbox('assets/divine_mercy.jpg')">
+        <img src="assets/divine_mercy.jpg" alt="Divine Mercy Devotion">
+        <div class="gallery-overlay"><i class="fas fa-magnifying-glass-plus"></i></div>
+      </div>
+
+      <div class="gallery-item" onclick="openLightbox('assets/virgin_mary.jpg')">
+        <img src="assets/virgin_mary.jpg" alt="Virgin Mary Prayer">
+        <div class="gallery-overlay"><i class="fas fa-magnifying-glass-plus"></i></div>
+      </div>
+    </div>
+
+    <!-- Lightbox Modal -->
+    <div class="lightbox-modal" id="lightbox" onclick="closeLightbox()">
+      <button class="lightbox-close" onclick="closeLightbox()">&times;</button>
+      <img src="" alt="Enlarged photo" class="lightbox-img" id="lightbox-img" onclick="event.stopPropagation()">
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="sanctuary-footer">
+    <div class="footer-content">
+      <p class="footer-quote">
+        "Taste and see that the Lord is good; blessed is the one who takes refuge in Him."
+        <br><span style="font-size: 0.95rem; color: var(--muted-gold); font-style: normal;">— Psalm 34:8</span>
+      </p>
+
+      <ul class="footer-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="verse.html">Daily Verse</a></li>
+        <li><a href="audio.html">Audio Devotionals</a></li>
+        <li><a href="saint.html">Saint of the Day</a></li>
+        <li><a href="gallery.html">Gallery</a></li>
+        <li><a href="digisquare.html">JY DigiSquare</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+
+      <div class="footer-copy">
+        &copy; <span id="year">2026</span> Jesus Youth Amal Jyothi College of Engineering. All rights reserved.
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    function openLightbox(imgSrc) {
+      const modal = document.getElementById('lightbox');
+      const img = document.getElementById('lightbox-img');
+      img.src = imgSrc;
+      modal.classList.add('active');
+    }
+
+    function closeLightbox() {
+      document.getElementById('lightbox').classList.remove('active');
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('is-visible');
+      });
+    }, { threshold: 0.15 });
+    document.querySelectorAll('.reveal-on-scroll').forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Us | Jesus Youth AJCE</title>
+  <meta name="description" content="Learn about Jesus Youth at Amal Jyothi College of Engineering — our mission, vision, history, and community of faith.">
+  <link rel="icon" type="image/png" href="assets/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/sanctuary.css">
+</head>
+<body>
+
+  <!-- Simple Floating Back Button -->
+  <div class="back-home-container">
+    <a href="index.html" class="back-home-link">
+      <i class="fas fa-arrow-left"></i> Back to Sanctuary
+    </a>
+  </div>
+
+  <!-- Header Banner -->
+  <section style="background: var(--soft-cream); padding: 140px 24px 60px 24px; text-align: center;">
+    <span class="section-tag">Who We Are</span>
+    <h1 style="margin-top: 10px;">About Jesus Youth AJCE</h1>
+    <p class="section-subtitle">A vibrant Catholic movement formed to nurture faith, fellowship, and leadership on campus.</p>
+  </section>
+
+  <!-- Main Content -->
+  <section class="section-wrapper">
+    <div class="about-grid">
+      <div class="about-image-frame reveal-on-scroll">
+        <img src="assets/hero_adoration.jpg" alt="Jesus Youth Eucharistic Adoration">
+        <div class="about-badge-floating">
+          <div class="about-badge-title">Eucharistic Heart</div>
+          <div class="about-badge-sub">Centered on Adoration & Prayer</div>
+        </div>
+      </div>
+
+      <div class="reveal-on-scroll">
+        <h2 class="serif-font" style="margin-bottom: 20px;">Shining the Light of Christ</h2>
+        <p class="lead">
+          Jesus Youth is an international Catholic youth movement active across colleges, universities, and parishes worldwide.
+        </p>
+        <p>
+          At Amal Jyothi College of Engineering, our community creates a welcoming sanctuary where engineering students can nurture their spiritual life, form deep lifelong friendships, and serve others with love.
+        </p>
+        <p>
+          Through weekly prayer meetings, music, cell groups, outreach initiatives, and sacraments, we support one another in growing as joy-filled missionary disciples of Jesus.
+        </p>
+      </div>
+    </div>
+
+    <!-- Mission & Vision -->
+    <div class="mission-vision-grid" style="margin-top: 90px;">
+      <div class="mv-card reveal-on-scroll">
+        <div class="mv-icon"><i class="fas fa-dove"></i></div>
+        <h3 style="margin-bottom: 14px;">Our Mission</h3>
+        <p>
+          To foster a creative and joyful Catholic lifestyle among young engineers and technologists through prayer, fellowship, leadership training, and active evangelization.
+        </p>
+      </div>
+
+      <div class="mv-card reveal-on-scroll">
+        <div class="mv-icon"><i class="fas fa-sun"></i></div>
+        <h3 style="margin-bottom: 14px;">Our Vision</h3>
+        <p>
+          Forming vibrant missionary disciples who bring the light, truth, and compassionate love of Jesus Christ into academic institutions, families, professions, and the wider world.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="sanctuary-footer">
+    <div class="footer-content">
+      <p class="footer-quote">
+        "I am the light of the world. Whoever follows me will never walk in darkness."
+        <br><span style="font-size: 0.95rem; color: var(--muted-gold); font-style: normal;">— John 8:12</span>
+      </p>
+
+      <ul class="footer-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="verse.html">Daily Verse</a></li>
+        <li><a href="audio.html">Audio Devotionals</a></li>
+        <li><a href="saint.html">Saint of the Day</a></li>
+        <li><a href="gallery.html">Gallery</a></li>
+        <li><a href="digisquare.html">JY DigiSquare</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+
+      <div class="footer-copy">
+        &copy; <span id="year">2026</span> Jesus Youth Amal Jyothi College of Engineering. All rights reserved.
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('is-visible');
+      });
+    }, { threshold: 0.15 });
+    document.querySelectorAll('.reveal-on-scroll').forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>

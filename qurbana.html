@@ -1,0 +1,1052 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Holy Qurbana Digital Taksa | Jesus Youth AJCE</title>
+  <meta name="description" content="Read and reflect on the Syro-Malabar Holy Qurbana liturgical text with our interactive Digital Taksa.">
+  <link rel="icon" type="image/png" href="assets/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/sanctuary.css">
+  <style>
+    /* --------------------------------------------------------------------------
+       CUSTOM LITURGICAL PDF VIEWER STYLES
+       -------------------------------------------------------------------------- */
+    :root {
+      --bg-color: #F7FCF9;
+      --panel-bg: #DAF1DE;
+      --text-color: #051F20;
+      --text-muted: #2E4E46;
+      --canvas-bg: #CBEED2;
+      --border-color: rgba(35, 83, 71, 0.22);
+      --sidebar-width: 330px;
+    }
+
+    body.theme-light {
+      --bg-color: #F7FCF9;
+      --panel-bg: #F4FAF6;
+      --text-color: #051F20;
+      --text-muted: #2E4E46;
+      --canvas-bg: #EAF7ED;
+      --border-color: rgba(35, 83, 71, 0.22);
+    }
+
+    body.theme-sepia {
+      --bg-color: #F4ECD8;
+      --panel-bg: #EEDCBE;
+      --text-color: #4A3E3D;
+      --text-muted: #705E53;
+      --canvas-bg: #E3CEAE;
+      --border-color: rgba(142, 110, 80, 0.25);
+    }
+
+    body.theme-dark {
+      --bg-color: #051F20;
+      --panel-bg: #0B2B26;
+      --text-color: #F7FCF9;
+      --text-muted: #8EB69B;
+      --canvas-bg: #071917;
+      --border-color: rgba(35, 83, 71, 0.15);
+    }
+
+    html, body {
+      height: 100vh;
+      overflow: hidden;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Layout structure */
+    .viewer-app-container {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      background: var(--bg-color);
+      color: var(--text-color);
+      transition: background-color 0.4s, color 0.4s;
+    }
+
+    /* Top Toolbar */
+    .viewer-toolbar {
+      height: 64px;
+      background: var(--panel-bg);
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      z-index: 10;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+      transition: background-color 0.4s, border-color 0.4s;
+    }
+
+    .toolbar-left, .toolbar-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .toolbar-center {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .toolbar-btn {
+      background: none;
+      border: 1px solid transparent;
+      color: var(--text-color);
+      padding: 8px 12px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: var(--transition-smooth);
+    }
+
+    .toolbar-btn:hover {
+      background: rgba(35, 83, 71, 0.12);
+      border-color: var(--border-color);
+      color: var(--muted-gold);
+    }
+
+    .toolbar-btn.active {
+      background: var(--gold-soft);
+      border-color: var(--muted-gold);
+      color: var(--muted-gold);
+    }
+
+    .toolbar-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-left: 10px;
+    }
+
+    .page-nav-controls {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(0,0,0,0.03);
+      padding: 3px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-color);
+    }
+
+    body.theme-dark .page-nav-controls {
+      background: rgba(255,255,255,0.03);
+    }
+
+    .page-input {
+      width: 48px;
+      text-align: center;
+      border: none;
+      background: transparent;
+      color: var(--text-color);
+      font-weight: 600;
+      font-size: 1rem;
+    }
+
+    .page-input:focus {
+      outline: none;
+    }
+
+    .page-slash {
+      color: var(--text-muted);
+      margin: 0 4px;
+    }
+
+    .page-total {
+      color: var(--text-muted);
+      margin-right: 8px;
+      font-size: 0.95rem;
+    }
+
+    .liturgy-page-indicator {
+      font-size: 0.85rem;
+      color: var(--muted-gold);
+      font-style: italic;
+      margin-left: 8px;
+      white-space: nowrap;
+    }
+
+    /* Main Workspace Split */
+    .viewer-workspace {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Left Sidebar: Bookmarks (Default collapsed) */
+    .viewer-sidebar {
+      width: var(--sidebar-width);
+      background: var(--panel-bg);
+      border-right: 1px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), margin-left 0.4s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.4s, border-color 0.4s;
+      z-index: 5;
+    }
+
+    .viewer-sidebar.collapsed {
+      margin-left: calc(-1 * var(--sidebar-width));
+    }
+
+    .sidebar-header {
+      padding: 16px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .bookmark-search-container {
+      position: relative;
+      width: 100%;
+    }
+
+    .bookmark-search-container i {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    .bookmark-search {
+      width: 100%;
+      padding: 10px 12px 10px 34px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-color);
+      background: var(--bg-color);
+      color: var(--text-color);
+      font-size: 0.9rem;
+      transition: var(--transition-smooth);
+    }
+
+    .bookmark-search:focus {
+      outline: none;
+      border-color: var(--muted-gold);
+      box-shadow: 0 0 0 3px rgba(35, 83, 71, 0.15);
+    }
+
+    /* Bookmarks list scrollbox */
+    .bookmarks-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 12px 8px;
+    }
+
+    .bookmark-group {
+      margin-bottom: 18px;
+    }
+
+    .bookmark-group-title {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--muted-gold);
+      padding: 6px 12px;
+      margin-bottom: 4px;
+    }
+
+    .bookmark-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: var(--radius-sm);
+      background: none;
+      border: none;
+      text-align: left;
+      cursor: pointer;
+      color: var(--text-color);
+      font-size: 0.9rem;
+      line-height: 1.4;
+      transition: var(--transition-smooth);
+      margin-bottom: 2px;
+    }
+
+    .bookmark-item:hover {
+      background: rgba(35, 83, 71, 0.08);
+      color: var(--muted-gold);
+    }
+
+    .bookmark-item.active {
+      background: var(--gold-soft);
+      color: var(--muted-gold);
+      font-weight: 600;
+      border-left: 3px solid var(--muted-gold);
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+
+    .bookmark-page-badge {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      background: rgba(0,0,0,0.04);
+      padding: 2px 8px;
+      border-radius: 30px;
+    }
+
+    body.theme-dark .bookmark-page-badge {
+      background: rgba(255,255,255,0.06);
+    }
+
+    /* Right Canvas Viewport */
+    .viewer-viewport {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      background: var(--canvas-bg);
+      padding: 30px;
+      position: relative;
+      scroll-behavior: smooth;
+      transition: background-color 0.4s;
+    }
+
+    .pdf-canvas-card {
+      background: #FFFFFF;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
+      border-radius: 4px;
+      position: relative;
+      transition: box-shadow 0.3s;
+    }
+
+    body.theme-dark .pdf-canvas-card {
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+    }
+
+    .pdf-canvas-card canvas {
+      display: block;
+      border-radius: 4px;
+    }
+
+    /* Loading Overlay & Spinner */
+    .loading-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(255, 255, 255, 0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 8;
+      backdrop-filter: blur(1px);
+      transition: opacity 0.3s;
+    }
+
+    body.theme-dark .loading-overlay {
+      background: rgba(18, 18, 18, 0.7);
+    }
+
+    .spinner {
+      width: 48px;
+      height: 48px;
+      border: 4px solid var(--border-color);
+      border-top-color: var(--muted-gold);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Initial Document Loader */
+    .initial-loader {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      height: 100%;
+      width: 100%;
+      color: var(--text-color);
+      text-align: center;
+      padding: 40px;
+    }
+
+    .loader-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      color: var(--muted-gold);
+    }
+
+    /* Focus Mode - Hides header and margins */
+    .viewer-app-container.focus-mode .viewer-toolbar {
+      display: none;
+    }
+    .viewer-app-container.focus-mode .viewer-sidebar {
+      display: none;
+    }
+    .viewer-app-container.focus-mode .viewer-viewport {
+      padding: 0;
+      background: var(--bg-color);
+      height: 100vh;
+    }
+    .viewer-app-container.focus-mode .pdf-canvas-card {
+      box-shadow: none;
+      border-radius: 0;
+    }
+
+    /* Floating Exit Focus Button */
+    .exit-focus-btn {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: var(--muted-gold);
+      color: #FFF;
+      border: none;
+      border-radius: 50px;
+      padding: 12px 24px;
+      box-shadow: 0 4px 15px rgba(35, 83, 71, 0.4);
+      cursor: pointer;
+      z-index: 100;
+      font-weight: 500;
+      display: none;
+      align-items: center;
+      gap: 8px;
+      transition: var(--transition-smooth);
+    }
+
+    .exit-focus-btn:hover {
+      background: var(--gold-hover);
+      transform: translateY(-2px);
+    }
+
+    .viewer-app-container.focus-mode .exit-focus-btn {
+      display: flex;
+    }
+
+    /* Pages container alignment */
+    .pages-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+      width: 100%;
+    }
+
+    /* Responsive Overlay */
+    @media (max-width: 768px) {
+      .viewer-sidebar {
+        position: absolute;
+        left: 0;
+        top: 64px;
+        bottom: 0;
+        box-shadow: 10px 0 30px rgba(0,0,0,0.1);
+      }
+      .viewer-sidebar.collapsed {
+        transform: translateX(-100%);
+        margin-left: 0;
+      }
+      .toolbar-title {
+        display: none;
+      }
+      .viewer-viewport {
+        padding: 10px;
+      }
+    }
+  </style>
+</head>
+<body class="theme-light">
+
+  <div class="viewer-app-container" id="app-container">
+    
+    <!-- Top App Navigation / Toolbar -->
+    <header class="viewer-toolbar">
+      <div class="toolbar-left">
+        <a href="index.html" class="toolbar-btn" title="Back to Sanctuary">
+          <i class="fas fa-arrow-left"></i>
+        </a>
+        <button class="toolbar-btn" id="sidebar-toggle-btn" title="Toggle Sidebar">
+          <i class="fas fa-bars"></i>
+        </button>
+        <span class="toolbar-title">Holy Qurbana Taksa</span>
+      </div>
+
+      <div class="toolbar-center">
+        <!-- Page Navigation -->
+        <div class="page-nav-controls">
+          <button class="toolbar-btn" id="prev-page-btn" style="padding: 4px 8px;" title="Scroll Up">
+            <i class="fas fa-chevron-up"></i>
+          </button>
+          <input type="text" class="page-input" id="page-num-input" value="23">
+          <span class="page-slash">/</span>
+          <span class="page-total" id="page-count">---</span>
+          <button class="toolbar-btn" id="next-page-btn" style="padding: 4px 8px;" title="Scroll Down">
+            <i class="fas fa-chevron-down"></i>
+          </button>
+        </div>
+        <span class="liturgy-page-indicator" id="liturgy-page-indicator">(Liturgy Page 1)</span>
+      </div>
+
+      <div class="toolbar-right">
+        <!-- Zoom controls -->
+        <button class="toolbar-btn" id="zoom-out-btn" title="Zoom Out">
+          <i class="fas fa-search-minus"></i>
+        </button>
+        <button class="toolbar-btn" id="zoom-in-btn" title="Zoom In">
+          <i class="fas fa-search-plus"></i>
+        </button>
+        
+        <!-- Theme Selectors -->
+        <div style="display: flex; gap: 8px; margin: 0 10px; align-items: center;">
+          <span class="theme-dot light" onclick="setTheme('light')" title="Day Theme"></span>
+          <span class="theme-dot sepia" onclick="setTheme('sepia')" title="Sanctuary Theme"></span>
+          <span class="theme-dot dark" onclick="setTheme('dark')" title="Night Vigil Theme"></span>
+        </div>
+
+        <!-- Focus Mode Toggle -->
+        <button class="toolbar-btn" id="focus-mode-btn" title="Enter Focus Prayer Mode">
+          <i class="fas fa-eye-slash"></i> <span>Focus</span>
+        </button>
+
+        <!-- Fullscreen -->
+        <button class="toolbar-btn" id="fullscreen-btn" title="Toggle Fullscreen">
+          <i class="fas fa-expand"></i>
+        </button>
+      </div>
+    </header>
+
+    <!-- Workspace split -->
+    <div class="viewer-workspace">
+      
+      <!-- Collapsible Bookmarks Sidebar (Default collapsed) -->
+      <aside class="viewer-sidebar collapsed" id="app-sidebar">
+        <div class="sidebar-header">
+          <div class="bookmark-search-container">
+            <i class="fas fa-search"></i>
+            <input type="text" class="bookmark-search" id="bookmark-search-input" placeholder="Search chapters / നിർദ്ദേശങ്ങൾ...">
+          </div>
+        </div>
+        <div class="bookmarks-list" id="bookmarks-container">
+          <!-- Dynamically populated bookmarks -->
+        </div>
+      </aside>
+
+      <!-- Right Scrollable PDF Viewport -->
+      <main class="viewer-viewport" id="viewport">
+        <div class="loading-overlay" id="loading-indicator" style="display: none;">
+          <div class="spinner"></div>
+        </div>
+
+        <div class="initial-loader" id="initial-loader">
+          <div class="spinner"></div>
+          <div class="loader-title">Opening Sacred Liturgy</div>
+          <p>Please wait while the Holy Qurbana Taksa is being prepared...</p>
+        </div>
+
+        <!-- Scrollable Pages container -->
+        <div class="pages-container" id="pages-container" style="display: none;">
+          <!-- Dynamically generated placeholder cards for all 544 pages -->
+        </div>
+      </main>
+    </div>
+
+    <!-- Floating Exit Focus Mode Button -->
+    <button class="exit-focus-btn" id="exit-focus-btn">
+      <i class="fas fa-eye"></i> Exit Focus Mode
+    </button>
+  </div>
+
+  <!-- PDF Data Source (Base64) -->
+  <script src="scripts/pdf_data.js"></script>
+
+  <!-- PDF.js Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
+  <script>
+    // Setup PDF.js worker URL
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
+
+    let pdfDoc = null;
+    let pageNum = 23; // Current visible page
+    let scale = 1.35;
+    let totalPages = 544; // Total document pages
+    let pdfAspectRatio = 1.414; // Default A4 aspect ratio height/width
+    const renderedPages = new Set(); // Track rendered page numbers
+
+    // Taksa Bookmark Index Database (+22 PDF page offset)
+    const bookmarks = [
+      {
+        group: "പൊതുനിർദ്ദേശങ്ങൾ (Introductory Guidelines)",
+        items: [
+          { name: "ടൈറ്റിൽ പേജ് (Title Cover Page)", page: 1, search: "title cover page coverpage ടൈറ്റിൽ കവർ" },
+          { name: "പ്രസ്താവന (Preface / Introduction)", page: 8, search: "preface introduction prasthavana പ്രസ്താവന" },
+          { name: "പൊതുനിർദ്ദേശങ്ങൾ (General Guidelines)", page: 10, search: "general guidelines pothu nirdeshangal പൊതുനിർദ്ദേശങ്ങൾ" },
+          { name: "പ്രത്യേകനിർദ്ദേശങ്ങൾ (Special Guidelines)", page: 15, search: "special guidelines prathyeka nirdeshangal പ്രത്യേകനിർദ്ദേശങ്ങൾ" },
+          { name: "സമൂഹബലി നിർദ്ദേശങ്ങൾ (Concelebration)", page: 20, search: "concelebration samoohabali സമൂഹബലി നിർദ്ദേശങ്ങൾ" }
+        ]
+      },
+      {
+        group: "വിശുദ്ധ കുർബാനയും അനാഫൊറകളും (Liturgy & Anaphoras)",
+        items: [
+          { name: "റാസക്രമം (Solemn Raza Liturgy)", page: 23, search: "solemn raza liturgy kramam qurbana റാസക്രമം രാസക്രമം കുർബാന" },
+          { name: "മാർ തെയോദോറിന്റെ കൂദാശക്രമം (Anaphora of Mar Theodore)", page: 143, search: "anaphora mar theodore liturgy kudashakramam മാർ തെയോദോറിന്റെ കൂദാശക്രമം തെയോദോർ" },
+          { name: "മാർ നെസ്തോറിയസിന്റെ കൂദാശക്രമം (Anaphora of Mar Nestorius)", page: 171, search: "anaphora mar nestorius liturgy kudashakramam മാർ നെസ്തോറിയസിന്റെ കൂദാശക്രമം നെസ്തോറിയസ്" }
+        ]
+      },
+      {
+        group: "മാറിവരുന്ന പ്രാർത്ഥനകൾ (Liturgical Seasons)",
+        items: [
+          { name: "മംഗളവാർത്തക്കാലം (Annunciation)", page: 205, search: "annunciation mangalavarthakkalam മംഗളവാർത്തക്കാലം മംഗള വാർത്ത" },
+          { name: "പിറവിക്കാലം (Nativity)", page: 216, search: "nativity piravikkalam പിറവിക്കാലം പിറവി" },
+          { name: "ദനഹാക്കാലം (Epiphany)", page: 227, search: "epiphany denhakalam ദനഹാക്കാലം ദനഹ" },
+          { name: "നോമ്പുകാലം (Great Fast / Lent)", page: 237, search: "lent nombukalam Great Fast fast നോമ്പുകാലം നോമ്പ്" },
+          { name: "ഉയിർപ്പുകാലം (Resurrection / Easter)", page: 247, search: "resurrection easter uyirppukalam ഉയിർപ്പുകാലം ഉയിർപ്പ്" },
+          { name: "ശ്ലീഹാക്കാലം (Feast of Apostles Season)", page: 257, search: "apostles slihakalam ശ്ലീഹാക്കാലം ശ്ലീഹ" },
+          { name: "കൈത്താക്കാലം (Kaitha / Summer Season)", page: 267, search: "summer kaithakalam കൈത്താക്കാലം കൈത" },
+          { name: "ഏലിയാ-സ്ലീവ-മൂശ കാലങ്ങൾ (Elijah-Sleeva-Mushe Kalangal)", page: 277, search: "elijah sleeva mushe kalangal ഏലിയാ സ്ലീവ മൂശ കാലങ്ങൾ" },
+          { name: "പള്ളിക്കൂദാശക്കാലം (Dedication of Church)", page: 287, search: "dedication church pallikkudashakkalam പള്ളിക്കൂദാശക്കാലം പള്ളി" }
+        ]
+      },
+      {
+        group: "പ്രധാന തിരുനാളുകൾ (Feasts & Celebrations)",
+        items: [
+          { name: "ദനഹാത്തിരുനാൾ (Feast of Epiphany)", page: 299, search: "denha thirunal feast epiphany ദനഹാത്തിരുനാൾ ദനഹ തിരുനാൾ" },
+          { name: "സ്വർഗ്ഗാരോഹണത്തിരുനാൾ (Feast of Ascension)", page: 310, search: "ascension feast swargarohana thirunal സ്വർഗ്ഗാരോഹണത്തിരുനാൾ സ്വർഗ്ഗാരോഹണം" },
+          { name: "പന്തക്കുസ്താ തിരുനാൾ (Feast of Pentecost)", page: 322, search: "pentecost feast penthecostha thirunal പന്തക്കുസ്താ തിരുനാൾ പന്തക്കുസ്ത" },
+          { name: "കർത്താവിന്റെ രൂപാന്തരീകരണം (Transfiguration)", page: 333, search: "transfiguration karthavinte rupanthareekarana thirunal കർത്താവിന്റെ രൂപാന്തരീകരണം" },
+          { name: "കുരിശിന്റെ പുകഴ്ച (Exaltation of Holy Cross)", page: 345, search: "holy cross exaltation kurishinte pukazhcha കുരിശിന്റെ പുകഴ്ച" },
+          { name: "കന്യകാമറിയത്തിന്റെ സ്വർഗ്ഗാരോപണം (Assumption)", page: 356, search: "assumption virgin mary swargaropanam കന്യകാമറിയത്തിന്റെ സ്വർഗ്ഗാരോപണം" },
+          { name: "കന്യകാമറിയത്തിന്റെ തിരുനാൾ (Common)", page: 366, search: "virgin mary feast common general കന്യകാമറിയത്തിന്റെ തിരുനാൾ" },
+          { name: "മാർ യൗസേപ്പ് പിതാവിന്റെ തിരുനാൾ (St. Joseph)", page: 376, search: "st joseph feast yosef pithavu മാർ യൗസേപ്പ് പിതാവിന്റെ തിരുനാൾ" },
+          { name: "വിശുദ്ധ സ്നാപകയോഹന്നാൻ (St. John Baptist)", page: 386, search: "st john baptist snapaka yohannan വിശുദ്ധ സ്നാപകയോഹന്നാൻ" },
+          { name: "മാർ തോമാശ്ലീഹായുടെ ദുക്റാന (Dukrana of St. Thomas)", page: 396, search: "dukrana st thomas thoma sleeha ദുക്റാന തോമാശ്ലീഹ" },
+          { name: "മാർ പത്രോസ് മാർ പൗലോസ് ശ്ലീഹന്മാർ", page: 407, search: "st peter paul pethrose paulose sleehanmar മാർ പത്രോസ് മാർ പൗലോസ് ശ്ലീഹന്മാർ" },
+          { name: "ശ്ലീഹന്മാരുടെ തിരുനാൾ (Feast of Apostles)", page: 417, search: "apostles feast common ശ്ലീഹന്മാരുടെ തിരുനാൾ" },
+          { name: "വിശുദ്ധരുടെ തിരുനാൾ (Feast of All Saints)", page: 427, search: "all saints feast common visudharude thirunal വിശുദ്ധരുടെ തിരുനാൾ" },
+          { name: "ഇടവക മദ്ധ്യസ്ഥന്റെ തിരുനാൾ (Patron Feast)", page: 438, search: "patron saint feast idavaka madhyasthante thirunal ഇടവക മദ്ധ്യസ്ഥന്റെ" },
+          { name: "വിശുദ്ധ കുര്യാക്കോസ് ഏലിയാസ് (St. Chavara)", page: 450, search: "st kuriakose elias chavara Chavara കുര്യാക്കോസ് ഏലിയാസ് ചാവറ" },
+          { name: "വിശുദ്ധ മറിയം ത്രേസ്യ (St. Mariam Thresia)", page: 460, search: "st mariam thresia മറിയം ത്രേസ്യ" },
+          { name: "വിശുദ്ധ അൽഫോൻസ (St. Alphonsa)", page: 470, search: "st alphonsa അൽഫോൻസ" },
+          { name: "വിശുദ്ധ ഏവുപ്രാസ്യ (St. Euphrasia)", page: 480, search: "st euphrasia ഏവുപ്രാസ്യ" }
+        ]
+      },
+      {
+        group: "നോമ്പും അനുസ്മരണങ്ങളും (Lent & Commemoration)",
+        items: [
+          { name: "മൂന്നുനോമ്പ് (Nineveh 3-Day Fast)", page: 490, search: "three days lent fast moonnu nombu ninive മൂന്നുനോമ്പ് നിനവേ" },
+          { name: "മരിച്ചവരുടെ ഓർമ്മ (Office of the Dead)", page: 500, search: "dead commemoration departed marichavarude ormma മരിച്ചവരുടെ ഓർമ്മ" }
+        ]
+      },
+      {
+        group: "അനുബന്ധങ്ങൾ (Appendices & Hymns)",
+        items: [
+          { name: "അനുബന്ധം I (Appendix I)", page: 513, search: "appendix 1 anubandham 1 അനുബന്ധം I" },
+          { name: "അനുബന്ധം II (Appendix II)", page: 527, search: "appendix 2 anubandham 2 അനുബന്ധം II" },
+          { name: "അനുബന്ധം III സുറിയാനിഗീതങ്ങൾ", page: 543, search: "appendix 3 syriac songs hymns geethangal സുറിയാനിഗീതങ്ങൾ" }
+        ]
+      }
+    ];
+
+    // Build bookmarks UI list
+    function buildBookmarks(filterText = "") {
+      const container = document.getElementById('bookmarks-container');
+      container.innerHTML = "";
+      const searchLower = filterText.toLowerCase().trim();
+
+      bookmarks.forEach(group => {
+        const filteredItems = group.items.filter(item => {
+          return item.name.toLowerCase().includes(searchLower) || 
+                 item.search.toLowerCase().includes(searchLower);
+        });
+
+        if (filteredItems.length > 0) {
+          const groupDiv = document.createElement('div');
+          groupDiv.className = 'bookmark-group';
+
+          const titleDiv = document.createElement('div');
+          titleDiv.className = 'bookmark-group-title';
+          titleDiv.textContent = group.group;
+          groupDiv.appendChild(titleDiv);
+
+          filteredItems.forEach(item => {
+            const btn = document.createElement('button');
+            btn.className = `bookmark-item ${pageNum === item.page ? 'active' : ''}`;
+            btn.dataset.page = item.page;
+            
+            let bookPageText = item.page >= 23 ? `P. ${item.page - 22}` : `Intro`;
+
+            btn.innerHTML = `
+              <span>${item.name}</span>
+              <span class="bookmark-page-badge">${bookPageText}</span>
+            `;
+
+            btn.addEventListener('click', () => {
+              goToPage(item.page);
+              if (window.innerWidth <= 768) {
+                document.getElementById('app-sidebar').classList.add('collapsed');
+              }
+            });
+
+            groupDiv.appendChild(btn);
+          });
+
+          container.appendChild(groupDiv);
+        }
+      });
+    }
+
+    // Highlight active bookmark
+    function updateActiveBookmark(currentPage) {
+      document.querySelectorAll('.bookmark-item').forEach(btn => {
+        const itemPage = parseInt(btn.dataset.page, 10);
+        if (currentPage === itemPage) {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+      });
+    }
+
+    // Build scrollable placeholder cards for 544 pages
+    function createPagePlaceholders() {
+      const container = document.getElementById('pages-container');
+      container.innerHTML = "";
+      container.style.display = 'flex';
+      container.style.visibility = 'hidden';
+      
+      const viewportWidth = document.getElementById('viewport').clientWidth;
+      const padding = window.innerWidth <= 768 ? 20 : 60;
+      const targetWidth = Math.min((viewportWidth - padding) * scale, 900);
+      const targetHeight = targetWidth * pdfAspectRatio;
+
+      for (let i = 1; i <= totalPages; i++) {
+        const pageCard = document.createElement('div');
+        pageCard.className = 'pdf-canvas-card';
+        pageCard.id = `page-card-${i}`;
+        pageCard.dataset.page = i;
+        pageCard.style.width = targetWidth + 'px';
+        pageCard.style.height = targetHeight + 'px';
+        pageCard.style.marginBottom = '24px';
+        
+        const pageCanvas = document.createElement('canvas');
+        pageCanvas.id = `canvas-page-${i}`;
+        pageCanvas.style.width = '100%';
+        pageCanvas.style.height = '100%';
+        pageCanvas.style.borderRadius = '4px';
+        
+        pageCard.appendChild(pageCanvas);
+        container.appendChild(pageCard);
+      }
+    }
+
+    // Lazy load canvas pages using IntersectionObserver
+    function setupLazyLoader() {
+      const observerOptions = {
+        root: document.getElementById('viewport'),
+        rootMargin: '600px 0px 600px 0px', // preload pages 600px ahead
+        threshold: 0.01
+      };
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const pageNum = parseInt(entry.target.dataset.page, 10);
+            if (!renderedPages.has(pageNum)) {
+              renderPage(pageNum);
+            }
+          }
+        });
+      }, observerOptions);
+
+      document.querySelectorAll('.pdf-canvas-card').forEach(card => {
+        observer.observe(card);
+      });
+    }
+
+    // Render individual page canvas
+    function renderPage(num) {
+      if (renderedPages.has(num)) return;
+      renderedPages.add(num);
+      
+      pdfDoc.getPage(num).then(function(page) {
+        const canvasCard = document.getElementById(`page-card-${num}`);
+        const pageCanvas = document.getElementById(`canvas-page-${num}`);
+        const pageCtx = pageCanvas.getContext('2d');
+        
+        const cardWidth = parseFloat(canvasCard.style.width);
+        const originalWidth = page.getViewport({ scale: 1 }).width;
+        const scaleNeeded = cardWidth / originalWidth;
+        const viewport = page.getViewport({ scale: scaleNeeded });
+        
+        const outputScale = window.devicePixelRatio || 1;
+        pageCanvas.width = Math.floor(viewport.width * outputScale);
+        pageCanvas.height = Math.floor(viewport.height * outputScale);
+
+        const transform = outputScale !== 1
+          ? [outputScale, 0, 0, outputScale, 0, 0]
+          : null;
+
+        const renderContext = {
+          canvasContext: pageCtx,
+          transform: transform,
+          viewport: viewport
+        };
+        
+        page.render(renderContext);
+      });
+    }
+
+    // Track scroll position to update header page count
+    function setupScrollTracker() {
+      const viewport = document.getElementById('viewport');
+      
+      viewport.addEventListener('scroll', () => {
+        const cards = document.querySelectorAll('.pdf-canvas-card');
+        const viewportCenter = viewport.scrollTop + (viewport.clientHeight / 2);
+        
+        let activePage = pageNum;
+        let minDistance = Infinity;
+
+        cards.forEach(card => {
+          const cardCenter = card.offsetTop + (card.clientHeight / 2);
+          const distance = Math.abs(viewportCenter - cardCenter);
+          if (distance < minDistance) {
+            minDistance = distance;
+            activePage = parseInt(card.dataset.page, 10);
+          }
+        });
+
+        if (activePage !== pageNum) {
+          pageNum = activePage;
+          document.getElementById('page-num-input').value = pageNum;
+          updatePageControls(pageNum);
+        }
+      });
+    }
+
+    function updatePageControls(num) {
+      let printedPageText = "";
+      if (num >= 23 && num <= 544) {
+        printedPageText = `(Liturgy Page ${num - 22})`;
+      } else if (num >= 10 && num <= 14) {
+        printedPageText = `(Guidelines Page ${num - 9})`;
+      } else if (num >= 15 && num <= 19) {
+        printedPageText = `(Special Guidelines Page ${num - 14})`;
+      } else {
+        printedPageText = `(Front Matter)`;
+      }
+      document.getElementById('liturgy-page-indicator').textContent = printedPageText;
+      updateActiveBookmark(num);
+    }
+
+    function goToPage(num, behavior = 'smooth') {
+      if (num < 1 || num > totalPages) return;
+      pageNum = num;
+      document.getElementById('page-num-input').value = num;
+      updatePageControls(num);
+      
+      const targetCard = document.getElementById(`page-card-${num}`);
+      if (targetCard) {
+        const viewport = document.getElementById('viewport');
+        if (behavior === 'auto') {
+          // Temporarily disable smooth scroll behavior defined in CSS
+          viewport.style.scrollBehavior = 'auto';
+        }
+        
+        targetCard.scrollIntoView({ behavior: behavior, block: 'start' });
+        
+        if (behavior === 'auto') {
+          // Restore the default smooth scroll behavior after scroll completes
+          setTimeout(() => {
+            viewport.style.scrollBehavior = '';
+          }, 50);
+        }
+      }
+    }
+
+    // Zoom adjustments
+    function updateZoom() {
+      const viewportWidth = document.getElementById('viewport').clientWidth;
+      const padding = window.innerWidth <= 768 ? 20 : 60;
+      const targetWidth = Math.min((viewportWidth - padding) * scale, 1200);
+      const targetHeight = targetWidth * pdfAspectRatio;
+
+      document.querySelectorAll('.pdf-canvas-card').forEach(card => {
+        card.style.width = targetWidth + 'px';
+        card.style.height = targetHeight + 'px';
+      });
+
+      // Clear render cache so visible pages are redrawn at higher DPI
+      renderedPages.clear();
+      
+      // Instantly scroll back to the active page under the new layout dimensions
+      goToPage(pageNum, 'auto');
+    }
+
+    // Set Theme Action
+    function setTheme(theme) {
+      document.body.className = `theme-${theme}`;
+      localStorage.setItem('qurbana-reader-theme', theme);
+    }
+
+    // Init Theme
+    const savedTheme = localStorage.getItem('qurbana-reader-theme') || 'light';
+    setTheme(savedTheme);
+
+    // Toggle Sidebar
+    document.getElementById('sidebar-toggle-btn').addEventListener('click', () => {
+      document.getElementById('app-sidebar').classList.toggle('collapsed');
+      setTimeout(resizePage, 300);
+    });
+
+    // Pagination buttons scroll
+    document.getElementById('prev-page-btn').addEventListener('click', () => {
+      if (pageNum <= 1) return;
+      goToPage(pageNum - 1);
+    });
+
+    document.getElementById('next-page-btn').addEventListener('click', () => {
+      if (pageNum >= totalPages) return;
+      goToPage(pageNum + 1);
+    });
+
+    // Page input field listener
+    document.getElementById('page-num-input').addEventListener('change', (e) => {
+      const val = parseInt(e.target.value, 10);
+      if (!isNaN(val) && val >= 1 && val <= totalPages) {
+        goToPage(val);
+      } else {
+        e.target.value = pageNum;
+      }
+    });
+
+    // Bookmark search listener
+    document.getElementById('bookmark-search-input').addEventListener('input', (e) => {
+      buildBookmarks(e.target.value);
+    });
+
+    // Zoom Buttons
+    document.getElementById('zoom-in-btn').addEventListener('click', () => {
+      if (scale >= 2.0) return;
+      scale += 0.15;
+      updateZoom();
+    });
+
+    // Zoom Out
+    document.getElementById('zoom-out-btn').addEventListener('click', () => {
+      if (scale <= 0.6) return;
+      scale -= 0.15;
+      updateZoom();
+    });
+
+    // Fullscreen Toggle
+    document.getElementById('fullscreen-btn').addEventListener('click', () => {
+      if (!document.fullscreenElement) {
+        document.getElementById('app-container').requestFullscreen().catch(err => {
+          console.error("Error toggling fullscreen: ", err);
+        });
+      } else {
+        document.exitFullscreen();
+      }
+    });
+
+    // Focus Prayer Mode
+    const appContainer = document.getElementById('app-container');
+    document.getElementById('focus-mode-btn').addEventListener('click', () => {
+      appContainer.classList.add('focus-mode');
+    });
+
+    document.getElementById('exit-focus-btn').addEventListener('click', () => {
+      appContainer.classList.remove('focus-mode');
+    });
+
+    // Handle window resize scaling
+    function resizePage() {
+      if (!pdfDoc) return;
+      const viewportWidth = document.getElementById('viewport').clientWidth;
+      const padding = window.innerWidth <= 768 ? 20 : 60;
+      scale = (viewportWidth - padding) / 600; 
+      if (scale > 1.8) scale = 1.4; 
+      if (scale < 0.6) scale = 0.6; 
+      updateZoom();
+    }
+
+    // Key navigations
+    window.addEventListener('keydown', (e) => {
+      if (document.activeElement.tagName === 'INPUT') return;
+      if (e.key === 'ArrowRight' || e.key === 'PageDown') {
+        if (pageNum < totalPages) goToPage(pageNum + 1);
+      } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+        if (pageNum > 1) goToPage(pageNum - 1);
+      }
+    });
+
+    // Convert Base64 PDF to memory block
+    function base64ToUint8Array(base64) {
+      const raw = window.atob(base64);
+      const rawLength = raw.length;
+      const array = new Uint8Array(new ArrayBuffer(rawLength));
+      for (let i = 0; i < rawLength; i++) {
+        array[i] = raw.charCodeAt(i);
+      }
+      return array;
+    }
+
+    // Load PDF Document
+    try {
+      const pdfData = base64ToUint8Array(qurbanaPdfBase64);
+      pdfjsLib.getDocument({data: pdfData}).promise.then(function(pdfDoc_) {
+        pdfDoc = pdfDoc_;
+        totalPages = pdfDoc.numPages;
+        document.getElementById('page-count').textContent = totalPages;
+        
+        // Grab first page aspect ratio to correctly size placeholders
+        pdfDoc.getPage(1).then(page => {
+          const viewport = page.getViewport({ scale: 1 });
+          pdfAspectRatio = viewport.height / viewport.width;
+          
+          createPagePlaceholders();
+          buildBookmarks();
+          
+          // Use setTimeout with 'auto' scroll behavior to ensure browser has completed layout
+          setTimeout(() => {
+            // Instantly jump to default page (page 23)
+            goToPage(pageNum, 'auto');
+            
+            // Make the pages container visible now that we are on the correct page
+            const container = document.getElementById('pages-container');
+            container.style.visibility = 'visible';
+            
+            // Hide the initial loader screen
+            document.getElementById('initial-loader').style.display = 'none';
+            
+            // Start the lazy loader and scroll tracker now that we are positioned
+            setupLazyLoader();
+            setupScrollTracker();
+          }, 150);
+        });
+
+        window.addEventListener('resize', resizePage);
+      }).catch(function(error) {
+        console.error("Error loading PDF: ", error);
+        document.getElementById('initial-loader').innerHTML = `
+          <div class="loader-title" style="color: #c95c5c;">
+            <i class="fas fa-exclamation-triangle"></i> Liturgy Loading Error
+          </div>
+          <p>Could not open the Holy Qurbana Taksa PDF file. Please ensure pdf_data.js contains valid base64 data.</p>
+        `;
+      });
+    } catch(err) {
+      console.error("Failed to decode base64: ", err);
+      document.getElementById('initial-loader').innerHTML = `
+        <div class="loader-title" style="color: #c95c5c;">
+          <i class="fas fa-exclamation-triangle"></i> Data Decoding Error
+        </div>
+        <p>Could not decode the liturgical data. Please check assets/pdf_data.js.</p>
+      `;
+    }
+  </script>
+</body>
+</html>
