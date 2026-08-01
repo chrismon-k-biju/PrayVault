@@ -491,7 +491,7 @@
             <table class="activity-table">
               <thead>
                 <tr>
-                  <th>Initials</th>
+                  <th>Photo / Initials</th>
                   <th>Name</th>
                   <th>Role</th>
                   <th>Department & Year</th>
@@ -675,6 +675,26 @@
       <div class="modal-body">
         <form id="leader-form" onsubmit="handleSaveLeader(event)">
           <input type="hidden" id="edit-leader-id">
+
+          <div class="form-group" style="text-align: center; margin-bottom: 25px;">
+            <label class="form-label" style="display: block; margin-bottom: 10px;">Profile Photo</label>
+            <div style="display: inline-flex; flex-direction: column; align-items: center; gap: 12px;">
+              <div id="leader-photo-preview-container" style="position: relative; width: 100px; height: 100px; border-radius: 50%; border: 2px dashed var(--border-subtle); display: flex; align-items: center; justify-content: center; overflow: hidden; background: var(--bg-light); transition: var(--transition-smooth);">
+                <span id="leader-photo-placeholder" style="font-size: 2.2rem; color: var(--charcoal-light); opacity: 0.7;"><i class="fas fa-user"></i></span>
+                <img id="leader-photo-img" style="display: none; width: 100%; height: 100%; object-fit: cover;">
+              </div>
+              <div style="display: flex; gap: 8px;">
+                <button type="button" onclick="document.getElementById('leader-photo-input').click()" class="btn-sanctuary btn-secondary" style="padding: 6px 14px; font-size: 0.8rem; height: auto;">
+                  <i class="fas fa-camera"></i> Choose Photo
+                </button>
+                <button type="button" id="leader-photo-remove-btn" onclick="removeLeaderPhoto()" class="btn-sanctuary btn-secondary" style="padding: 6px 14px; font-size: 0.8rem; display: none; color: #dc2626; border-color: rgba(220, 38, 38, 0.2); height: auto;">
+                  <i class="fas fa-trash-alt"></i> Remove
+                </button>
+              </div>
+              <input type="file" id="leader-photo-input" accept="image/*" style="display: none;" onchange="handleLeaderPhotoChange(event)">
+              <input type="hidden" id="leader-photo-base64">
+            </div>
+          </div>
 
           <div class="form-group">
             <label class="form-label" for="leader-form-name">Name</label>
@@ -1267,7 +1287,11 @@
       leaders.forEach(item => {
         const tr = document.createElement('tr');
         tr.innerHTML = `
-          <td><span class="action-badge" style="font-family: monospace;">${escapeHtml(item.initials)}</span></td>
+          <td>
+            <div style="display: flex; align-items: center; gap: 10px;">
+              ${item.photo ? `<img src="${item.photo}" style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 1.5px solid var(--border-subtle); background: var(--bg-light);">` : `<div style="width: 36px; height: 36px; border-radius: 50%; background: var(--gold-soft); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; color: var(--muted-gold); border: 1.5px solid var(--border-subtle);">${escapeHtml(item.initials)}</div>`}
+            </div>
+          </td>
           <td style="font-weight: 500; color: var(--charcoal);">${escapeHtml(item.name)}</td>
           <td style="font-weight: 500; color: var(--muted-gold);">${escapeHtml(item.role)}</td>
           <td>${escapeHtml(item.dept)}</td>
@@ -1289,10 +1313,70 @@
       return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
     }
 
+    function handleLeaderPhotoChange(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const img = new Image();
+        img.onload = function() {
+          const canvas = document.createElement('canvas');
+          let width = img.width;
+          let height = img.height;
+          
+          // Max size 300px
+          const maxSize = 300;
+          if (width > height) {
+            if (width > maxSize) {
+              height *= maxSize / width;
+              width = maxSize;
+            }
+          } else {
+            if (height > maxSize) {
+              width *= maxSize / height;
+              height = maxSize;
+            }
+          }
+          
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
+          
+          // Compress to JPEG with 0.8 quality
+          const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.8);
+          
+          document.getElementById('leader-photo-base64').value = compressedDataUrl;
+          
+          const previewImg = document.getElementById('leader-photo-img');
+          previewImg.src = compressedDataUrl;
+          previewImg.style.display = 'block';
+          document.getElementById('leader-photo-placeholder').style.display = 'none';
+          document.getElementById('leader-photo-remove-btn').style.display = 'inline-block';
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function removeLeaderPhoto() {
+      document.getElementById('leader-photo-base64').value = '';
+      document.getElementById('leader-photo-input').value = '';
+      
+      const previewImg = document.getElementById('leader-photo-img');
+      previewImg.src = '';
+      previewImg.style.display = 'none';
+      
+      document.getElementById('leader-photo-placeholder').style.display = 'block';
+      document.getElementById('leader-photo-remove-btn').style.display = 'none';
+    }
+
     function openAddLeaderModal() {
       document.getElementById('leader-modal-title').textContent = 'Add Torchbearer Details';
       document.getElementById('leader-form').reset();
       document.getElementById('edit-leader-id').value = '';
+      removeLeaderPhoto();
       document.getElementById('leader-modal').classList.add('active');
     }
 
@@ -1307,6 +1391,17 @@
       document.getElementById('leader-form-dept').value = item.dept;
       document.getElementById('leader-form-email').value = item.email || '';
       document.getElementById('leader-form-phone').value = item.phone || '';
+
+      if (item.photo) {
+        document.getElementById('leader-photo-base64').value = item.photo;
+        const previewImg = document.getElementById('leader-photo-img');
+        previewImg.src = item.photo;
+        previewImg.style.display = 'block';
+        document.getElementById('leader-photo-placeholder').style.display = 'none';
+        document.getElementById('leader-photo-remove-btn').style.display = 'inline-block';
+      } else {
+        removeLeaderPhoto();
+      }
 
       document.getElementById('leader-modal').classList.add('active');
     }
@@ -1334,6 +1429,7 @@
       let dept = document.getElementById('leader-form-dept').value.trim();
       const email = document.getElementById('leader-form-email').value.trim();
       const phone = document.getElementById('leader-form-phone').value.trim();
+      const photo = document.getElementById('leader-photo-base64').value;
 
       if (initials === 'Fr.') {
         dept = '';
@@ -1345,7 +1441,8 @@
         role,
         dept,
         email,
-        phone
+        phone,
+        photo: photo || ''
       };
 
       try {
@@ -1536,6 +1633,8 @@
     window.closeLeaderModal = closeLeaderModal;
     window.handleSaveLeader = handleSaveLeader;
     window.handleDeleteLeader = handleDeleteLeader;
+    window.handleLeaderPhotoChange = handleLeaderPhotoChange;
+    window.removeLeaderPhoto = removeLeaderPhoto;
     window.openAddAdminModal = openAddAdminModal;
     window.closeAddAdminModal = closeAddAdminModal;
     window.handleCreateAdmin = handleCreateAdmin;
