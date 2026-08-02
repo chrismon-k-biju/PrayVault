@@ -860,7 +860,7 @@
   </div>
 
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.17.0/firebase-app.js";
+    import { initializeApp, getApp } from "https://www.gstatic.com/firebasejs/12.17.0/firebase-app.js";
     import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.17.0/firebase-auth.js";
     import { 
       db, 
@@ -1588,12 +1588,51 @@
 
       try {
         // Initialize a temporary secondary Firebase app instance to create user without signing out current admin
-        const secondaryApp = initializeApp(firebaseConfig, "TempRegistrationApp");
+        let secondaryApp;
+        try {
+          secondaryApp = getApp("TempRegistrationApp");
+        } catch (e) {
+          secondaryApp = initializeApp(firebaseConfig, "TempRegistrationApp");
+        }
         const secondaryAuth = getAuth(secondaryApp);
         
-        // Create user in Auth database
-        await createUserWithEmailAndPassword(secondaryAuth, email, password);
-        await signOut(secondaryAuth); // immediately sign out secondary instance
+        try {
+          // Create user in Auth database
+          await createUserWithEmailAndPassword(secondaryAuth, email, password);
+          await signOut(secondaryAuth); // immediately sign out secondary instance
+        } catch (authError) {
+          // Clean up secondary auth to avoid memory leak / duplicate app instance errors in future tries
+          try {
+            await signOut(secondaryAuth);
+          } catch(e) {}
+
+          if (authError.code === 'auth/email-already-in-use' || authError.message.includes('email-already-in-use')) {
+            // Check if they are already in the admins collection in Firestore
+            const adminDoc = await getDoc(doc(db, "admins", email));
+            if (adminDoc.exists()) {
+              alert(`The account "${email}" is already registered as an admin (${adminDoc.data().role || 'Admin'}).`);
+              return;
+            } else {
+              // The account exists in Firebase Auth but not in Firestore admins
+              const confirmGrant = confirm(`The email "${email}" is already registered in Firebase Authentication.\n\nWould you like to grant administrator permissions to this existing account?`);
+              if (confirmGrant) {
+                // Save metadata and role mappings in Firestore admins collection
+                await setDoc(doc(db, "admins", email), {
+                  name,
+                  email,
+                  role
+                });
+                closeAddAdminModal();
+                alert('Admin permissions successfully granted to the existing account!');
+                return;
+              } else {
+                return;
+              }
+            }
+          } else {
+            throw authError;
+          }
+        }
 
         // Save metadata and role mappings in Firestore admins collection
         await setDoc(doc(db, "admins", email), {
