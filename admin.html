@@ -862,6 +862,7 @@
   <script type="module">
     import { initializeApp, getApp } from "https://www.gstatic.com/firebasejs/12.17.0/firebase-app.js";
     import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.17.0/firebase-auth.js";
+    import { getFirestore } from "https://www.gstatic.com/firebasejs/12.17.0/firebase-firestore.js";
     import { 
       db, 
       collection, 
@@ -1595,10 +1596,20 @@
           secondaryApp = initializeApp(firebaseConfig, "TempRegistrationApp");
         }
         const secondaryAuth = getAuth(secondaryApp);
+        const secondaryDb = getFirestore(secondaryApp);
         
         try {
           // Create user in Auth database
           await createUserWithEmailAndPassword(secondaryAuth, email, password);
+          
+          // Save metadata and role mappings in Firestore admins collection using secondaryDb
+          // (This write is authenticated as the newly created user, satisfying rules like request.auth.token.email == email)
+          await setDoc(doc(secondaryDb, "admins", email), {
+            name,
+            email,
+            role
+          });
+          
           await signOut(secondaryAuth); // immediately sign out secondary instance
         } catch (authError) {
           // Clean up secondary auth to avoid memory leak / duplicate app instance errors in future tries
@@ -1614,17 +1625,25 @@
               return;
             } else {
               // The account exists in Firebase Auth but not in Firestore admins
+              // Since we don't have the existing user's password, we must write using the primary DB (default app).
+              // If the security rules allow administrators to add existing accounts, this write will succeed.
+              // Otherwise, if the rules only allow self-writes, it will alert the appropriate instruction.
               const confirmGrant = confirm(`The email "${email}" is already registered in Firebase Authentication.\n\nWould you like to grant administrator permissions to this existing account?`);
               if (confirmGrant) {
-                // Save metadata and role mappings in Firestore admins collection
-                await setDoc(doc(db, "admins", email), {
-                  name,
-                  email,
-                  role
-                });
-                closeAddAdminModal();
-                alert('Admin permissions successfully granted to the existing account!');
-                return;
+                try {
+                  await setDoc(doc(db, "admins", email), {
+                    name,
+                    email,
+                    role
+                  });
+                  closeAddAdminModal();
+                  alert('Admin permissions successfully granted to the existing account!');
+                  return;
+                } catch (writeError) {
+                  console.error("Error granting admin permissions via primary db: ", writeError);
+                  alert(`Failed to grant permissions: ${writeError.message}\n\nNote: The Firestore security rules may only allow users to register themselves. Please ask the user to log in and set up their profile, or update the Firestore rules to allow administrators to write.`);
+                  return;
+                }
               } else {
                 return;
               }
@@ -1633,13 +1652,6 @@
             throw authError;
           }
         }
-
-        // Save metadata and role mappings in Firestore admins collection
-        await setDoc(doc(db, "admins", email), {
-          name,
-          email,
-          role
-        });
 
         closeAddAdminModal();
         alert('Admin account successfully registered!');
