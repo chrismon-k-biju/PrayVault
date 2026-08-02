@@ -223,15 +223,15 @@
           const roleA = (a.role || '').toLowerCase();
           const roleB = (b.role || '').toLowerCase();
           
-          const isSpecialA = roleA.includes('chaplin') || roleA.includes('chaplain') || roleA.includes('elder');
-          const isSpecialB = roleB.includes('chaplin') || roleB.includes('chaplain') || roleB.includes('elder');
+          const isSpecialA = roleA.includes('Chaplain') || roleA.includes('chaplain') || roleA.includes('elder');
+          const isSpecialB = roleB.includes('Chaplain') || roleB.includes('chaplain') || roleB.includes('elder');
           
           if (isSpecialA && !isSpecialB) return -1;
           if (!isSpecialA && isSpecialB) return 1;
           
           if (isSpecialA && isSpecialB) {
-            const isChapA = roleA.includes('chaplin') || roleA.includes('chaplain');
-            const isChapB = roleB.includes('chaplin') || roleB.includes('chaplain');
+            const isChapA = roleA.includes('Chaplain') || roleA.includes('chaplain');
+            const isChapB = roleB.includes('Chaplain') || roleB.includes('chaplain');
             if (isChapA && !isChapB) return -1;
             if (!isChapA && isChapB) return 1;
           }
