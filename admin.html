@@ -17,6 +17,10 @@
   <!-- FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
+  <!-- Cropper.js for adjusting leader profile pics -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.js"></script>
+
   <!-- Main Sanctuary Design System Stylesheet -->
   <link rel="stylesheet" href="css/sanctuary.css">
 
@@ -342,6 +346,12 @@
       background: #c95c5c;
       color: white;
       border-color: #c95c5c;
+    }
+
+    /* Cropper.js circular crop area styling override */
+    .cropper-view-box,
+    .cropper-face {
+      border-radius: 50%;
     }
   </style>
 </head>
@@ -819,6 +829,35 @@
     </div>
   </div>
 
+  <!-- PHOTO CROPPER MODAL -->
+  <div class="admin-modal" id="cropper-modal">
+    <div class="modal-content" style="max-width: 500px;">
+      <div class="modal-header">
+        <h3>Crop & Adjust Profile Picture</h3>
+        <button onclick="window.closeCropperModal()" class="btn-circle"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="modal-body" style="padding: 20px;">
+        <div style="max-width: 100%; height: 300px; overflow: hidden; background: var(--bg-light); display: flex; align-items: center; justify-content: center; border-radius: var(--radius-md); border: 1px solid var(--border-subtle);">
+          <img id="cropper-image" style="max-width: 100%; display: block;">
+        </div>
+        <div style="display: flex; justify-content: center; gap: 10px; margin-top: 15px;">
+          <button type="button" onclick="window.cropperZoom(0.1)" class="btn-circle" title="Zoom In"><i class="fas fa-search-plus"></i></button>
+          <button type="button" onclick="window.cropperZoom(-0.1)" class="btn-circle" title="Zoom Out"><i class="fas fa-search-minus"></i></button>
+          <button type="button" onclick="window.cropperRotate(-90)" class="btn-circle" title="Rotate Left"><i class="fas fa-rotate-left"></i></button>
+          <button type="button" onclick="window.cropperRotate(90)" class="btn-circle" title="Rotate Right"><i class="fas fa-rotate-right"></i></button>
+        </div>
+        <div style="display: flex; gap: 15px; margin-top: 20px;">
+          <button type="button" onclick="window.applyCrop()" class="btn-sanctuary btn-primary" style="flex: 1; justify-content: center; border: none; cursor: pointer; padding: 12px 20px;">
+            <i class="fas fa-check"></i> Apply Crop
+          </button>
+          <button type="button" onclick="window.closeCropperModal()" class="btn-sanctuary btn-secondary" style="flex: 1; justify-content: center; padding: 12px 20px;">
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.17.0/firebase-app.js";
     import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.17.0/firebase-auth.js";
@@ -851,6 +890,7 @@
     let prayers = [];
     let leaders = [];
     let adminAccounts = [];
+    let cropperInstance = null;
 
     // Real-time Authentication state observer
     onAuthStateChanged(auth, async (user) => {
@@ -1319,45 +1359,77 @@
 
       const reader = new FileReader();
       reader.onload = function(e) {
-        const img = new Image();
-        img.onload = function() {
-          const canvas = document.createElement('canvas');
-          let width = img.width;
-          let height = img.height;
-          
-          // Max size 300px
-          const maxSize = 300;
-          if (width > height) {
-            if (width > maxSize) {
-              height *= maxSize / width;
-              width = maxSize;
-            }
-          } else {
-            if (height > maxSize) {
-              width *= maxSize / height;
-              height = maxSize;
-            }
-          }
-          
-          canvas.width = width;
-          canvas.height = height;
-          const ctx = canvas.getContext('2d');
-          ctx.drawImage(img, 0, 0, width, height);
-          
-          // Compress to JPEG with 0.8 quality
-          const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.8);
-          
-          document.getElementById('leader-photo-base64').value = compressedDataUrl;
-          
-          const previewImg = document.getElementById('leader-photo-img');
-          previewImg.src = compressedDataUrl;
-          previewImg.style.display = 'block';
-          document.getElementById('leader-photo-placeholder').style.display = 'none';
-          document.getElementById('leader-photo-remove-btn').style.display = 'inline-block';
-        };
-        img.src = e.target.result;
+        const cropperImg = document.getElementById('cropper-image');
+        cropperImg.src = e.target.result;
+        
+        // Open modal
+        document.getElementById('cropper-modal').classList.add('active');
+        
+        // Destroy existing cropper if any
+        if (cropperInstance) {
+          cropperInstance.destroy();
+        }
+        
+        // Initialize Cropper (1:1 square crop box)
+        cropperInstance = new Cropper(cropperImg, {
+          aspectRatio: 1,
+          viewMode: 1,
+          autoCropArea: 0.9,
+          background: false,
+          dragMode: 'move',
+          responsive: true,
+          restore: false
+        });
       };
       reader.readAsDataURL(file);
+    }
+
+    function applyCrop() {
+      if (!cropperInstance) return;
+      
+      // Get cropped canvas at high resolution
+      const canvas = cropperInstance.getCroppedCanvas({
+        width: 300,
+        height: 300,
+        imageSmoothingEnabled: true,
+        imageSmoothingQuality: 'high',
+      });
+      
+      if (canvas) {
+        // Compress as JPEG (0.85 quality)
+        const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.85);
+        document.getElementById('leader-photo-base64').value = compressedDataUrl;
+        
+        const previewImg = document.getElementById('leader-photo-img');
+        previewImg.src = compressedDataUrl;
+        previewImg.style.display = 'block';
+        document.getElementById('leader-photo-placeholder').style.display = 'none';
+        document.getElementById('leader-photo-remove-btn').style.display = 'inline-block';
+      }
+      
+      closeCropperModal();
+    }
+
+    function closeCropperModal() {
+      document.getElementById('cropper-modal').classList.remove('active');
+      if (cropperInstance) {
+        cropperInstance.destroy();
+        cropperInstance = null;
+      }
+      // Reset input value to allow re-uploading the same file
+      document.getElementById('leader-photo-input').value = '';
+    }
+
+    function cropperZoom(ratio) {
+      if (cropperInstance) {
+        cropperInstance.zoom(ratio);
+      }
+    }
+
+    function cropperRotate(degree) {
+      if (cropperInstance) {
+        cropperInstance.rotate(degree);
+      }
     }
 
     function removeLeaderPhoto() {
@@ -1635,6 +1707,10 @@
     window.handleDeleteLeader = handleDeleteLeader;
     window.handleLeaderPhotoChange = handleLeaderPhotoChange;
     window.removeLeaderPhoto = removeLeaderPhoto;
+    window.applyCrop = applyCrop;
+    window.closeCropperModal = closeCropperModal;
+    window.cropperZoom = cropperZoom;
+    window.cropperRotate = cropperRotate;
     window.openAddAdminModal = openAddAdminModal;
     window.closeAddAdminModal = closeAddAdminModal;
     window.handleCreateAdmin = handleCreateAdmin;
