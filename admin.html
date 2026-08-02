@@ -988,7 +988,12 @@
       document.getElementById('admin-user-display').textContent = username;
 
       const tabTorchbearersBtn = document.getElementById('tab-torchbearers-btn');
-      if (role === 'Unit Coordinator' || role === 'Assistant Coordinator') {
+      const canEditTorchbearers = userEmail.toLowerCase() === 'chrismonkbiju61@gmail.com' ||
+                                  role === 'Main Admin' ||
+                                  role === 'Unit Coordinator' || 
+                                  role === 'Assistant Coordinator' ||
+
+      if (canEditTorchbearers) {
         tabTorchbearersBtn.style.display = 'flex';
       } else {
         tabTorchbearersBtn.style.display = 'none';
@@ -999,8 +1004,8 @@
 
       const tabAdminsBtn = document.getElementById('tab-admins-btn');
       const isPowerUser = userEmail.toLowerCase() === 'chrismonkbiju61@gmail.com' ||
+                          role === 'Main Admin' ||
                           role === 'Unit Coordinator' || 
-                          role === 'Coordinator' ||
                           role === 'Assistant Coordinator';
 
       if (isPowerUser) {
