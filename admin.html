@@ -904,12 +904,12 @@
 
         // 1. Whitelist Chrismon's default admin account specifically as Unit Coordinator
         if (userEmail.toLowerCase() === 'chrismonkbiju61@gmail.com') {
-          role = 'Unit Coordinator';
+          role = 'Main Admin';
           username = 'Chrismon';
           try {
             await setDoc(doc(db, "admins", "chrismonkbiju61@gmail.com"), {
               name: "Chrismon",
-              role: "Unit Coordinator",
+              role: "Main Admin",
               email: "chrismonkbiju61@gmail.com"
             });
           } catch (e) {
