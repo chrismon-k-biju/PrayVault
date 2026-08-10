@@ -272,6 +272,7 @@ a {
 .hero-logo {
   height: 120px;
   width: auto;
+  max-width: 100%;
   display: block;
 }
 
@@ -1216,6 +1217,15 @@ a {
 
   .logo-top-left {
     height: 42px;
+  }
+
+  .hero-logo-wrapper {
+    padding: 10px 24px;
+    margin-bottom: 20px;
+  }
+
+  .hero-logo {
+    height: 70px;
   }
 
   .hero-section {
