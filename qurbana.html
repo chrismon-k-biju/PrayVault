@@ -25,6 +25,7 @@
       --canvas-bg: #CBEED2;
       --border-color: rgba(35, 83, 71, 0.22);
       --sidebar-width: 330px;
+      --toolbar-height: 64px;
     }
 
     body.theme-light {
@@ -73,7 +74,7 @@
 
     /* Top Toolbar */
     .viewer-toolbar {
-      height: 64px;
+      height: var(--toolbar-height);
       background: var(--panel-bg);
       border-bottom: 1px solid var(--border-color);
       display: flex;
@@ -305,7 +306,7 @@
     .viewer-viewport {
       flex: 1;
       overflow-y: auto;
-      overflow-x: hidden;
+      overflow-x: auto;
       background: var(--canvas-bg);
       padding: 30px;
       position: relative;
@@ -438,12 +439,38 @@
       width: 100%;
     }
 
-    /* Responsive Overlay */
+    /* Theme dot indicator styles */
+    .theme-dot {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      display: inline-block;
+      cursor: pointer;
+      border: 1px solid var(--border-color);
+      transition: transform 0.2s;
+    }
+    .theme-dot:hover {
+      transform: scale(1.25);
+    }
+    .theme-dot.light {
+      background-color: #F7FCF9;
+    }
+    .theme-dot.sepia {
+      background-color: #F4ECD8;
+    }
+    .theme-dot.dark {
+      background-color: #051F20;
+    }
+
+    /* Responsive Overlay & Styling */
     @media (max-width: 768px) {
+      :root {
+        --toolbar-height: 56px;
+      }
       .viewer-sidebar {
         position: absolute;
         left: 0;
-        top: 64px;
+        top: var(--toolbar-height);
         bottom: 0;
         box-shadow: 10px 0 30px rgba(0,0,0,0.1);
       }
@@ -456,6 +483,49 @@
       }
       .viewer-viewport {
         padding: 10px;
+      }
+      .viewer-toolbar {
+        padding: 0 8px;
+        gap: 4px;
+      }
+      .toolbar-left, .toolbar-right, .toolbar-center {
+        gap: 6px;
+      }
+      .toolbar-btn {
+        padding: 6px 8px;
+        font-size: 0.9rem;
+      }
+      .toolbar-btn span {
+        display: none; /* Hide button text like 'Focus' on mobile */
+      }
+      .theme-dot {
+        width: 14px;
+        height: 14px;
+      }
+      .liturgy-page-indicator {
+        font-size: 0.75rem;
+        margin-left: 2px;
+      }
+    }
+
+    @media (max-width: 576px) {
+      /* Hide non-critical buttons to make space on very small screens */
+      #zoom-in-btn, #zoom-out-btn, #fullscreen-btn {
+        display: none;
+      }
+      .liturgy-page-indicator {
+        display: none;
+      }
+      .page-nav-controls {
+        gap: 2px;
+        padding: 2px;
+      }
+      .page-input {
+        width: 36px;
+        font-size: 0.9rem;
+      }
+      .page-total {
+        font-size: 0.85rem;
       }
     }
   </style>
@@ -572,7 +642,7 @@
 
     let pdfDoc = null;
     let pageNum = 23; // Current visible page
-    let scale = 1.35;
+    let scale = window.innerWidth <= 768 ? 1.0 : 1.35;
     let totalPages = 544; // Total document pages
     let pdfAspectRatio = 1.414; // Default A4 aspect ratio height/width
     const renderedPages = new Set(); // Track rendered page numbers
@@ -931,7 +1001,7 @@
 
     // Zoom Buttons
     document.getElementById('zoom-in-btn').addEventListener('click', () => {
-      if (scale >= 2.0) return;
+      if (scale >= 2.2) return;
       scale += 0.15;
       updateZoom();
     });
@@ -969,9 +1039,13 @@
       if (!pdfDoc) return;
       const viewportWidth = document.getElementById('viewport').clientWidth;
       const padding = window.innerWidth <= 768 ? 20 : 60;
-      scale = (viewportWidth - padding) / 600; 
-      if (scale > 1.8) scale = 1.4; 
-      if (scale < 0.6) scale = 0.6; 
+      if (window.innerWidth <= 768) {
+        scale = 1.0;
+      } else {
+        scale = (viewportWidth - padding) / 600; 
+        if (scale > 1.8) scale = 1.4; 
+        if (scale < 0.6) scale = 0.6; 
+      }
       updateZoom();
     }
 
@@ -1009,6 +1083,17 @@
           const viewport = page.getViewport({ scale: 1 });
           pdfAspectRatio = viewport.height / viewport.width;
           
+          // Set scale dynamically on startup
+          const viewportWidth = document.getElementById('viewport').clientWidth;
+          const padding = window.innerWidth <= 768 ? 20 : 60;
+          if (window.innerWidth <= 768) {
+            scale = 1.0;
+          } else {
+            scale = (viewportWidth - padding) / 600; 
+            if (scale > 1.8) scale = 1.4; 
+            if (scale < 0.6) scale = 0.6; 
+          }
+          
           createPagePlaceholders();
           buildBookmarks();
           
@@ -1031,6 +1116,88 @@
         });
 
         window.addEventListener('resize', resizePage);
+
+        // Pinch-to-zoom implementation for mobile devices
+        (function() {
+          const viewportEl = document.getElementById('viewport');
+          const pagesContainerEl = document.getElementById('pages-container');
+          let initialTouchDistance = null;
+          let initialScale = 1.0;
+          let currentTempScale = 1.0;
+
+          function getTouchDistance(touches) {
+            const dx = touches[0].clientX - touches[1].clientX;
+            const dy = touches[0].clientY - touches[1].clientY;
+            return Math.sqrt(dx * dx + dy * dy);
+          }
+
+          viewportEl.addEventListener('touchstart', (e) => {
+            if (e.touches.length === 2) {
+              e.preventDefault(); // Prevent browser-level zoom
+              initialTouchDistance = getTouchDistance(e.touches);
+              initialScale = scale;
+              currentTempScale = scale;
+              
+              // Find center of pinch in viewport scroll coordinates
+              const touch1 = e.touches[0];
+              const touch2 = e.touches[1];
+              const clientX = (touch1.clientX + touch2.clientX) / 2;
+              const clientY = (touch1.clientY + touch2.clientY) / 2;
+              
+              // Convert to viewport relative coords
+              const rect = viewportEl.getBoundingClientRect();
+              const relativeX = clientX - rect.left;
+              const relativeY = clientY - rect.top;
+              
+              // Set transform-origin to this relative center in pages-container
+              const originX = relativeX + viewportEl.scrollLeft;
+              const originY = relativeY + viewportEl.scrollTop;
+              
+              pagesContainerEl.style.transformOrigin = `${originX}px ${originY}px`;
+            }
+          }, { passive: false });
+
+          viewportEl.addEventListener('touchmove', (e) => {
+            if (e.touches.length === 2 && initialTouchDistance !== null) {
+              e.preventDefault();
+              const currentDistance = getTouchDistance(e.touches);
+              const ratio = currentDistance / initialTouchDistance;
+              
+              // Clamp scale to a reasonable limit (0.6 to 2.2)
+              let targetScale = initialScale * ratio;
+              targetScale = Math.max(0.6, Math.min(2.2, targetScale));
+              currentTempScale = targetScale;
+              
+              const tempScaleRatio = targetScale / initialScale;
+              pagesContainerEl.style.transform = `scale(${tempScaleRatio})`;
+            }
+          }, { passive: false });
+
+          function endZoomGesture() {
+            if (initialTouchDistance !== null) {
+              pagesContainerEl.style.transform = '';
+              pagesContainerEl.style.transformOrigin = '';
+              scale = currentTempScale;
+              initialTouchDistance = null;
+              updateZoom();
+            }
+          }
+
+          viewportEl.addEventListener('touchend', (e) => {
+            if (e.touches.length < 2) {
+              endZoomGesture();
+            }
+          }, { passive: false });
+
+          viewportEl.addEventListener('touchcancel', () => {
+            endZoomGesture();
+          }, { passive: false });
+          
+          // Prevent Safari default pinch-to-zoom gestures
+          document.addEventListener('gesturestart', (e) => {
+            e.preventDefault();
+          });
+        })();
       }).catch(function(error) {
         console.error("Error loading PDF: ", error);
         document.getElementById('initial-loader').innerHTML = `
