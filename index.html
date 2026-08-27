@@ -173,8 +173,8 @@
         </div>
       </div>
 
-      <!-- Row 3: JY DigiSquare, Meet Torchbearers -->
-      <div class="pathways-row-2col">
+      <!-- Row 3: JY DigiSquare, Meet Torchbearers, Prayer Adoption -->
+      <div class="pathways-row-3col">
         <!-- JY DigiSquare -->
         <div class="event-card reveal-on-scroll">
           <div>
@@ -209,6 +209,24 @@
             style="margin-top: 20px; width: max-content; padding: 10px 24px;">
             Meet Leaders
           </a>
+        </div>
+
+        <!-- Prayer Adoption -->
+        <div class="event-card reveal-on-scroll">
+          <div>
+            <div class="event-date-badge">
+              <span class="event-date-day"><i class="fas fa-heart"></i></span>
+              <span class="event-date-month">Adoption</span>
+            </div>
+            <h3 class="event-title">Prayer Adoption</h3>
+            <p style="font-size: 0.95rem; color: #666;">
+              Adopt a junior in prayer, committing to support them and walk together in the Jesus Youth lifestyle.
+            </p>
+          </div>
+          <button onclick="openAdoptionModal()" class="btn-sanctuary btn-secondary"
+            style="margin-top: 20px; width: max-content; padding: 10px 24px; border: none; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; font-family: inherit;">
+            Join Now
+          </button>
         </div>
       </div>
     </div>
@@ -252,6 +270,166 @@
     </div>
   </footer>
 
+  <!-- PRAYER ADOPTION MODAL -->
+  <div id="adoption-modal" class="admin-modal">
+    <div class="modal-content" style="max-width: 600px;">
+      <div class="modal-header">
+        <h3 style="display: flex; align-items: center; gap: 10px; margin: 0; font-family: inherit; font-size: 1.3rem;">
+          <i class="fas fa-heart" style="color: var(--muted-gold);"></i> Prayer Adoption Program
+        </h3>
+        <button onclick="closeAdoptionModal()" class="btn-circle" style="border: 1px solid var(--border-subtle); background: white; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center;"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="modal-body" style="padding: 30px;">
+        
+        <!-- STEP 1: COMMITMENT QUESTIONS -->
+        <div id="adoption-step-1">
+          <p style="font-size: 0.95rem; margin-bottom: 25px; color: #555; line-height: 1.6;">
+            Please answer the following commitment questions to proceed with the adoption of a junior in prayer.
+          </p>
+          
+          <form id="adoption-form-step-1" onsubmit="handleAdoptionStep1(event)">
+            
+            <!-- Question 1 -->
+            <div class="form-group" style="margin-bottom: 24px; border-bottom: 1px solid rgba(0,0,0,0.05); padding-bottom: 20px;">
+              <p style="font-weight: 600; margin-bottom: 12px; font-size: 1rem; color: var(--charcoal);">
+                Question 1: I am ready to adopt a junior
+              </p>
+              <div style="display: flex; gap: 20px; align-items: center;">
+                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 0.95rem; user-select: none;">
+                  <input type="checkbox" id="q1-yes" class="adoption-checkbox-q1" onclick="handleExclusiveCheckbox('adoption-checkbox-q1', this)" style="width: 18px; height: 18px; accent-color: var(--muted-gold);">
+                  Yes
+                </label>
+                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 0.95rem; user-select: none;">
+                  <input type="checkbox" id="q1-no" class="adoption-checkbox-q1" onclick="handleExclusiveCheckbox('adoption-checkbox-q1', this)" style="width: 18px; height: 18px; accent-color: var(--muted-gold);">
+                  No
+                </label>
+              </div>
+            </div>
+
+            <!-- Question 2 -->
+            <div class="form-group" style="margin-bottom: 24px; border-bottom: 1px solid rgba(0,0,0,0.05); padding-bottom: 20px;">
+              <p style="font-weight: 600; margin-bottom: 12px; font-size: 1rem; color: var(--charcoal);">
+                Question 2: I have followed six pillars of Jesus Youth
+              </p>
+              <div style="display: flex; gap: 20px; align-items: center;">
+                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 0.95rem; user-select: none;">
+                  <input type="checkbox" id="q2-yes" class="adoption-checkbox-q2" onclick="handleExclusiveCheckbox('adoption-checkbox-q2', this)" style="width: 18px; height: 18px; accent-color: var(--muted-gold);">
+                  Yes
+                </label>
+                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 0.95rem; user-select: none;">
+                  <input type="checkbox" id="q2-no" class="adoption-checkbox-q2" onclick="handleExclusiveCheckbox('adoption-checkbox-q2', this)" style="width: 18px; height: 18px; accent-color: var(--muted-gold);">
+                  No
+                </label>
+              </div>
+            </div>
+
+            <!-- Question 3 -->
+            <div class="form-group" style="margin-bottom: 24px; border-bottom: 1px solid rgba(0,0,0,0.05); padding-bottom: 20px;">
+              <p style="font-weight: 600; margin-bottom: 12px; font-size: 1rem; color: var(--charcoal);">
+                Question 3: I shall follow the codes and conduct of Jesus Youth
+              </p>
+              <div style="display: flex; gap: 20px; align-items: center;">
+                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 0.95rem; user-select: none;">
+                  <input type="checkbox" id="q3-yes" class="adoption-checkbox-q3" onclick="handleExclusiveCheckbox('adoption-checkbox-q3', this)" style="width: 18px; height: 18px; accent-color: var(--muted-gold);">
+                  Yes
+                </label>
+                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 0.95rem; user-select: none;">
+                  <input type="checkbox" id="q3-no" class="adoption-checkbox-q3" onclick="handleExclusiveCheckbox('adoption-checkbox-q3', this)" style="width: 18px; height: 18px; accent-color: var(--muted-gold);">
+                  No
+                </label>
+              </div>
+            </div>
+
+            <div id="step1-error" style="color: #c95c5c; font-weight: 500; font-size: 0.9rem; margin-bottom: 20px; display: none;">
+              <i class="fas fa-exclamation-circle"></i> You must confirm 'Yes' to all questions to proceed.
+            </div>
+
+            <button type="submit" class="btn-sanctuary btn-primary" style="width: 100%; justify-content: center; border: none; cursor: pointer;">
+              Next Step <i class="fas fa-arrow-right"></i>
+            </button>
+          </form>
+        </div>
+
+        <!-- STEP 2: PERSONAL INFORMATION FORM -->
+        <div id="adoption-step-2" style="display: none;">
+          <p style="font-size: 0.95rem; margin-bottom: 25px; color: #555; line-height: 1.6;">
+            Commitments verified! Please fill in your contact information below to complete the adoption process.
+          </p>
+
+          <form id="adoption-form-step-2" onsubmit="handleAdoptionStep2(event)">
+            <div class="form-group" style="margin-bottom: 20px;">
+              <label class="form-label" for="adopt-name" style="display: block; font-size: 0.88rem; font-weight: 500; color: var(--charcoal); margin-bottom: 8px;">Name</label>
+              <input type="text" id="adopt-name" class="form-input" placeholder="Your Full Name" required style="width: 100%; padding: 14px 18px; border-radius: var(--radius-sm); border: 1px solid #E2DDD5; background: var(--bg-light); font-family: inherit; font-size: 0.95rem; color: var(--charcoal);">
+            </div>
+
+            <div class="form-group" style="margin-bottom: 20px;">
+              <label class="form-label" for="adopt-phone" style="display: block; font-size: 0.88rem; font-weight: 500; color: var(--charcoal); margin-bottom: 8px;">Phone Number</label>
+              <input type="tel" id="adopt-phone" class="form-input" placeholder="Phone Number (e.g. +91 9876543210)" required style="width: 100%; padding: 14px 18px; border-radius: var(--radius-sm); border: 1px solid #E2DDD5; background: var(--bg-light); font-family: inherit; font-size: 0.95rem; color: var(--charcoal);">
+            </div>
+
+            <div class="form-group" style="margin-bottom: 20px;">
+              <label class="form-label" for="adopt-email" style="display: block; font-size: 0.88rem; font-weight: 500; color: var(--charcoal); margin-bottom: 8px;">Email ID</label>
+              <input type="email" id="adopt-email" class="form-input" placeholder="Your Email Address" required style="width: 100%; padding: 14px 18px; border-radius: var(--radius-sm); border: 1px solid #E2DDD5; background: var(--bg-light); font-family: inherit; font-size: 0.95rem; color: var(--charcoal);">
+            </div>
+
+            <div class="form-group" style="margin-bottom: 20px;">
+              <label class="form-label" for="adopt-grad-year" style="display: block; font-size: 0.88rem; font-weight: 500; color: var(--charcoal); margin-bottom: 8px;">Year of Graduation</label>
+              <input type="number" id="adopt-grad-year" class="form-input" placeholder="Graduation Year (e.g. 2028)" required style="width: 100%; padding: 14px 18px; border-radius: var(--radius-sm); border: 1px solid #E2DDD5; background: var(--bg-light); font-family: inherit; font-size: 0.95rem; color: var(--charcoal);">
+            </div>
+
+            <!-- Status -->
+            <div class="form-group" style="margin-bottom: 20px;">
+              <label class="form-label" style="display: block; font-size: 0.88rem; font-weight: 500; color: var(--charcoal); margin-bottom: 8px;">Status</label>
+              <div style="display: flex; gap: 20px; align-items: center; margin-top: 8px;">
+                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 0.95rem; user-select: none;">
+                  <input type="checkbox" id="status-married" class="adoption-status-cb" onclick="handleExclusiveCheckbox('adoption-status-cb', this)" style="width: 18px; height: 18px; accent-color: var(--muted-gold);">
+                  Married
+                </label>
+                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 0.95rem; user-select: none;">
+                  <input type="checkbox" id="status-unmarried" class="adoption-status-cb" onclick="handleExclusiveCheckbox('adoption-status-cb', this)" style="width: 18px; height: 18px; accent-color: var(--muted-gold);">
+                  Unmarried
+                </label>
+              </div>
+            </div>
+
+            <!-- Work Status -->
+            <div class="form-group" style="margin-bottom: 20px;">
+              <label class="form-label" style="display: block; font-size: 0.88rem; font-weight: 500; color: var(--charcoal); margin-bottom: 8px;">Work Status</label>
+              <div style="display: flex; gap: 20px; align-items: center; flex-wrap: wrap; margin-top: 8px;">
+                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 0.95rem; user-select: none;">
+                  <input type="checkbox" id="work-employed" class="adoption-work-cb" onclick="handleExclusiveCheckbox('adoption-work-cb', this)" style="width: 18px; height: 18px; accent-color: var(--muted-gold);">
+                  Employed
+                </label>
+                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 0.95rem; user-select: none;">
+                  <input type="checkbox" id="work-unemployed" class="adoption-work-cb" onclick="handleExclusiveCheckbox('adoption-work-cb', this)" style="width: 18px; height: 18px; accent-color: var(--muted-gold);">
+                  UnEmployed
+                </label>
+                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 0.95rem; user-select: none;">
+                  <input type="checkbox" id="work-selfemployed" class="adoption-work-cb" onclick="handleExclusiveCheckbox('adoption-work-cb', this)" style="width: 18px; height: 18px; accent-color: var(--muted-gold);">
+                  Self-Employee
+                </label>
+              </div>
+            </div>
+
+            <div id="step2-error" style="color: #c95c5c; font-weight: 500; font-size: 0.9rem; margin-bottom: 20px; display: none;">
+              <i class="fas fa-exclamation-circle"></i> Please select one option for Status and Work Status.
+            </div>
+
+            <div style="display: flex; gap: 15px; margin-top: 30px;">
+              <button type="button" onclick="goBackToStep1()" class="btn-sanctuary btn-secondary" style="flex: 1; justify-content: center; padding: 12px 20px;">
+                Back
+              </button>
+              <button type="submit" class="btn-sanctuary btn-primary" style="flex: 2; justify-content: center; border: none; cursor: pointer; padding: 12px 20px;">
+                Submit Application <i class="fas fa-check"></i>
+              </button>
+            </div>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
 
@@ -261,6 +439,119 @@
       });
     }, { threshold: 0.15 });
     document.querySelectorAll('.reveal-on-scroll').forEach(el => observer.observe(el));
+  </script>
+
+  <script type="module">
+    import { db, collection, addDoc } from './scripts/firebase.js';
+
+    // Model controls
+    window.openAdoptionModal = function() {
+      document.getElementById('adoption-modal').classList.add('active');
+      document.getElementById('adoption-step-1').style.display = 'block';
+      document.getElementById('adoption-step-2').style.display = 'none';
+      document.getElementById('adoption-form-step-1').reset();
+      document.getElementById('adoption-form-step-2').reset();
+      document.getElementById('step1-error').style.display = 'none';
+      document.getElementById('step2-error').style.display = 'none';
+    };
+
+    window.closeAdoptionModal = function() {
+      document.getElementById('adoption-modal').classList.remove('active');
+    };
+
+    window.handleExclusiveCheckbox = function(className, currentCheckbox) {
+      if (currentCheckbox.checked) {
+        document.querySelectorAll('.' + className).forEach(cb => {
+          if (cb !== currentCheckbox) {
+            cb.checked = false;
+          }
+        });
+      }
+    };
+
+    window.handleAdoptionStep1 = function(event) {
+      event.preventDefault();
+      const q1Yes = document.getElementById('q1-yes').checked;
+      const q2Yes = document.getElementById('q2-yes').checked;
+      const q3Yes = document.getElementById('q3-yes').checked;
+
+      if (q1Yes && q2Yes && q3Yes) {
+        document.getElementById('step1-error').style.display = 'none';
+        document.getElementById('adoption-step-1').style.display = 'none';
+        document.getElementById('adoption-step-2').style.display = 'block';
+      } else {
+        document.getElementById('step1-error').style.display = 'block';
+      }
+    };
+
+    window.goBackToStep1 = function() {
+      document.getElementById('adoption-step-1').style.display = 'block';
+      document.getElementById('adoption-step-2').style.display = 'none';
+      document.getElementById('step2-error').style.display = 'none';
+    };
+
+    window.handleAdoptionStep2 = async function(event) {
+      event.preventDefault();
+      
+      const name = document.getElementById('adopt-name').value.trim();
+      const phone = document.getElementById('adopt-phone').value.trim();
+      const email = document.getElementById('adopt-email').value.trim();
+      const graduationYear = document.getElementById('adopt-grad-year').value;
+
+      // Status
+      const married = document.getElementById('status-married').checked;
+      const unmarried = document.getElementById('status-unmarried').checked;
+      let statusVal = "";
+      if (married) statusVal = "Married";
+      else if (unmarried) statusVal = "Unmarried";
+
+      // Work Status
+      const employed = document.getElementById('work-employed').checked;
+      const unemployed = document.getElementById('work-unemployed').checked;
+      const selfemployed = document.getElementById('work-selfemployed').checked;
+      let workStatusVal = "";
+      if (employed) workStatusVal = "Employed";
+      else if (unemployed) workStatusVal = "UnEmployed";
+      else if (selfemployed) workStatusVal = "Self-Employee";
+
+      if (!statusVal || !workStatusVal) {
+        document.getElementById('step2-error').style.display = 'block';
+        return;
+      }
+      document.getElementById('step2-error').style.display = 'none';
+
+      const timestamp = new Date().toLocaleString();
+
+      try {
+        await addDoc(collection(db, "adoptions"), {
+          name: name,
+          phone: phone,
+          email: email,
+          graduationYear: Number(graduationYear),
+          status: statusVal,
+          workStatus: workStatusVal,
+          adoptJunior: true,
+          followedPillars: true,
+          followConduct: true,
+          timestamp: timestamp
+        });
+        alert('Thank you! Your Prayer Adoption registration has been submitted successfully.');
+        closeAdoptionModal();
+      } catch (error) {
+        console.error("Error saving adoption to Firestore: ", error);
+        
+        // Fallback to localStorage
+        let localAdoptions = JSON.parse(localStorage.getItem('jy_adoptions') || '[]');
+        localAdoptions.push({
+          name, phone, email, graduationYear, status: statusVal, workStatus: workStatusVal,
+          adoptJunior: true, followedPillars: true, followConduct: true, timestamp
+        });
+        localStorage.setItem('jy_adoptions', JSON.stringify(localAdoptions));
+        
+        alert('Thank you! Your Prayer Adoption registration has been submitted (saved locally).');
+        closeAdoptionModal();
+      }
+    };
   </script>
 </body>
 
