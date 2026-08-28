@@ -1162,6 +1162,12 @@
         });
         updates.sort((a, b) => Number(a.id) - Number(b.id));
         renderUpdatesList();
+      }, (error) => {
+        console.error("Updates listener failed:", error);
+        const tbody = document.getElementById('updates-table-body');
+        if (tbody) {
+          tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: #d9534f; padding: 30px;"><i class="fas fa-exclamation-triangle"></i> Access Denied: Missing or insufficient permissions.</td></tr>`;
+        }
       });
 
       // Listen to Prayers (only active ones)
@@ -1173,6 +1179,18 @@
         });
         prayers.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
         renderPrayersList();
+      }, (error) => {
+        console.error("Prayers listener failed:", error);
+        const container = document.getElementById('prayers-list-container');
+        if (container) {
+          container.innerHTML = `
+            <div style="text-align: center; color: #d9534f; padding: 40px; border: 1px dashed #d9534f; border-radius: var(--radius-md); background: #fdf2f2;">
+              <i class="fas fa-exclamation-triangle" style="font-size: 2.5rem; margin-bottom: 15px;"></i>
+              <h4>Access Denied</h4>
+              <p style="font-size: 0.9rem; margin-top: 5px;">You do not have permission to view active prayer requests.</p>
+            </div>
+          `;
+        }
       });
 
       // Listen to Leaders
@@ -1183,6 +1201,12 @@
         });
         leaders.sort((a, b) => Number(a.id) - Number(b.id));
         renderLeadersList();
+      }, (error) => {
+        console.error("Leaders listener failed:", error);
+        const tbody = document.getElementById('leaders-table-body');
+        if (tbody) {
+          tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: #d9534f; padding: 30px;"><i class="fas fa-exclamation-triangle"></i> Access Denied: Missing or insufficient permissions.</td></tr>`;
+        }
       });
 
       // Listen to Admins
@@ -1193,6 +1217,12 @@
         });
         adminAccounts.sort((a, b) => a.email.localeCompare(b.email));
         renderAdminsList();
+      }, (error) => {
+        console.error("Admins listener failed:", error);
+        const tbody = document.getElementById('admins-table-body');
+        if (tbody) {
+          tbody.innerHTML = `<tr><td colspan="4" style="text-align: center; color: #d9534f; padding: 30px;"><i class="fas fa-exclamation-triangle"></i> Access Denied: Missing or insufficient permissions.</td></tr>`;
+        }
       });
 
       // Listen to Prayer Adoptions
@@ -1204,6 +1234,12 @@
         // Sort by timestamp descending
         adoptions.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
         renderAdoptionList();
+      }, (error) => {
+        console.error("Adoptions listener failed:", error);
+        const tbody = document.getElementById('adoption-table-body');
+        if (tbody) {
+          tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: #d9534f; padding: 30px;"><i class="fas fa-exclamation-triangle"></i> Access Denied: Missing or insufficient permissions.</td></tr>`;
+        }
       });
     }
 
