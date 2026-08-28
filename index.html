@@ -373,6 +373,16 @@
             </div>
 
             <div class="form-group" style="margin-bottom: 20px;">
+              <label class="form-label" for="adopt-dept" style="display: block; font-size: 0.88rem; font-weight: 500; color: var(--charcoal); margin-bottom: 8px;">Department</label>
+              <input type="text" id="adopt-dept" class="form-input" placeholder="e.g. Computer Science & Engineering" required style="width: 100%; padding: 14px 18px; border-radius: var(--radius-sm); border: 1px solid #E2DDD5; background: var(--bg-light); font-family: inherit; font-size: 0.95rem; color: var(--charcoal);">
+            </div>
+
+            <div class="form-group" style="margin-bottom: 20px;">
+              <label class="form-label" for="adopt-pass-skill" style="display: block; font-size: 0.88rem; font-weight: 500; color: var(--charcoal); margin-bottom: 8px;">Are you confident in passing any skill to your junior?</label>
+              <input type="text" id="adopt-pass-skill" class="form-input" placeholder="e.g. Yes, Public Speaking / Coding / Design" required style="width: 100%; padding: 14px 18px; border-radius: var(--radius-sm); border: 1px solid #E2DDD5; background: var(--bg-light); font-family: inherit; font-size: 0.95rem; color: var(--charcoal);">
+            </div>
+
+            <div class="form-group" style="margin-bottom: 20px;">
               <label class="form-label" for="adopt-grad-year" style="display: block; font-size: 0.88rem; font-weight: 500; color: var(--charcoal); margin-bottom: 8px;">Year of Graduation</label>
               <input type="number" id="adopt-grad-year" class="form-input" placeholder="Graduation Year (e.g. 2028)" required style="width: 100%; padding: 14px 18px; border-radius: var(--radius-sm); border: 1px solid #E2DDD5; background: var(--bg-light); font-family: inherit; font-size: 0.95rem; color: var(--charcoal);">
             </div>
@@ -496,6 +506,8 @@
       const name = document.getElementById('adopt-name').value.trim();
       const phone = document.getElementById('adopt-phone').value.trim();
       const email = document.getElementById('adopt-email').value.trim();
+      const department = document.getElementById('adopt-dept').value.trim();
+      const passSkill = document.getElementById('adopt-pass-skill').value.trim();
       const graduationYear = document.getElementById('adopt-grad-year').value;
 
       // Status
@@ -527,6 +539,8 @@
           name: name,
           phone: phone,
           email: email,
+          department: department,
+          passSkill: passSkill,
           graduationYear: Number(graduationYear),
           status: statusVal,
           workStatus: workStatusVal,
@@ -543,7 +557,7 @@
         // Fallback to localStorage
         let localAdoptions = JSON.parse(localStorage.getItem('jy_adoptions') || '[]');
         localAdoptions.push({
-          name, phone, email, graduationYear, status: statusVal, workStatus: workStatusVal,
+          name, phone, email, department, passSkill, graduationYear, status: statusVal, workStatus: workStatusVal,
           adoptJunior: true, followedPillars: true, followConduct: true, timestamp
         });
         localStorage.setItem('jy_adoptions', JSON.stringify(localAdoptions));

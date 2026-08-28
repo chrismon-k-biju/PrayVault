@@ -568,9 +568,11 @@
                   <th>Name</th>
                   <th>Phone Number</th>
                   <th>Email ID</th>
+                  <th>Department</th>
                   <th>Year of Graduation</th>
                   <th>Status</th>
                   <th>Work Status</th>
+                  <th>Pass Skill</th>
                   <th>Commitments</th>
                 </tr>
               </thead>
@@ -1238,7 +1240,7 @@
         console.error("Adoptions listener failed:", error);
         const tbody = document.getElementById('adoption-table-body');
         if (tbody) {
-          tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: #d9534f; padding: 30px;"><i class="fas fa-exclamation-triangle"></i> Access Denied: Missing or insufficient permissions.</td></tr>`;
+          tbody.innerHTML = `<tr><td colspan="9" style="text-align: center; color: #d9534f; padding: 30px;"><i class="fas fa-exclamation-triangle"></i> Access Denied: Missing or insufficient permissions.</td></tr>`;
         }
       });
     }
@@ -1884,7 +1886,7 @@
       tbody.innerHTML = '';
 
       if (adoptions.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: #888; padding: 30px;">No prayer adoption registrations found.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="9" style="text-align: center; color: #888; padding: 30px;">No prayer adoption registrations found.</td></tr>`;
         return;
       }
 
@@ -1894,9 +1896,11 @@
           <td style="font-weight: 500; color: var(--charcoal);">${escapeHtml(item.name || '')}</td>
           <td><a href="tel:${escapeHtml(item.phone || '')}" style="color: var(--muted-gold); font-weight: 500;">${escapeHtml(item.phone || '')}</a></td>
           <td>${escapeHtml(item.email || '')}</td>
+          <td>${escapeHtml(item.department || '')}</td>
           <td>${escapeHtml(String(item.graduationYear || ''))}</td>
           <td>${escapeHtml(item.status || '')}</td>
           <td>${escapeHtml(item.workStatus || '')}</td>
+          <td>${escapeHtml(item.passSkill || '')}</td>
           <td style="font-size: 0.85rem; color: #666;">
             Adopt: ${item.adoptJunior ? 'Yes' : 'No'} | 
             Pillars: ${item.followedPillars ? 'Yes' : 'No'} | 
@@ -1914,8 +1918,8 @@
       }
       
       const headers = [
-        "Name", "Phone Number", "Email ID", "Year of Graduation", 
-        "Status", "Work Status", 
+        "Name", "Phone Number", "Email ID", "Department", "Year of Graduation", 
+        "Status", "Work Status", "Passing Skill to Junior",
         "Adopt a Junior", "Followed Six Pillars", "Follow Codes and Conduct", 
         "Timestamp"
       ];
@@ -1924,9 +1928,11 @@
         item.name || '',
         item.phone ? `="${item.phone}"` : '',
         item.email || '',
+        item.department || '',
         item.graduationYear || '',
         item.status || '',
         item.workStatus || '',
+        item.passSkill || '',
         item.adoptJunior ? 'Yes' : 'No',
         item.followedPillars ? 'Yes' : 'No',
         item.followConduct ? 'Yes' : 'No',
