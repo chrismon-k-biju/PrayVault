@@ -452,7 +452,7 @@
   </script>
 
   <script type="module">
-    import { db, collection, addDoc } from './scripts/firebase.js';
+    import { db, collection, addDoc, query, where, getDocs } from './scripts/firebase.js';
 
     // Model controls
     window.openAdoptionModal = function() {
@@ -505,7 +505,7 @@
       
       const name = document.getElementById('adopt-name').value.trim();
       const phone = document.getElementById('adopt-phone').value.trim();
-      const email = document.getElementById('adopt-email').value.trim();
+      const email = document.getElementById('adopt-email').value.trim().toLowerCase();
       const department = document.getElementById('adopt-dept').value.trim();
       const passSkill = document.getElementById('adopt-pass-skill').value.trim();
       const graduationYear = document.getElementById('adopt-grad-year').value;
@@ -531,6 +531,37 @@
         return;
       }
       document.getElementById('step2-error').style.display = 'none';
+
+      // Check for duplicate submissions (same email or phone number)
+      try {
+        // Query by email
+        const emailQuery = query(collection(db, "adoptions"), where("email", "==", email));
+        const emailSnapshot = await getDocs(emailQuery);
+        if (!emailSnapshot.empty) {
+          alert('An application with this Email ID has already been submitted under the Prayer Adoption program.');
+          return;
+        }
+
+        // Query by phone number
+        const phoneQuery = query(collection(db, "adoptions"), where("phone", "==", phone));
+        const phoneSnapshot = await getDocs(phoneQuery);
+        if (!phoneSnapshot.empty) {
+          alert('An application with this Phone Number has already been submitted under the Prayer Adoption program.');
+          return;
+        }
+      } catch (checkError) {
+        console.warn("Failed checking online database for duplicates: ", checkError);
+        // Fallback to local storage checks
+        let localAdoptions = JSON.parse(localStorage.getItem('jy_adoptions') || '[]');
+        const isDuplicateLocal = localAdoptions.some(item => 
+          (item.email && item.email.toLowerCase() === email) || 
+          item.phone === phone
+        );
+        if (isDuplicateLocal) {
+          alert('An application with this Email ID or Phone Number has already been submitted (local copy found).');
+          return;
+        }
+      }
 
       const timestamp = new Date().toLocaleString();
 
