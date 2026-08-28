@@ -1922,7 +1922,7 @@
       
       const rows = adoptions.map(item => [
         item.name || '',
-        item.phone || '',
+        item.phone ? `="${item.phone}"` : '',
         item.email || '',
         item.graduationYear || '',
         item.status || '',
